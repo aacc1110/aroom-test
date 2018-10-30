@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/aacc1110/aroom/issues"
   },
-  "homepage": "https://github.com/aacc1110/aroom#readme"
+  "homepage": "https://github.com/aacc1110/aroom#readme",
+  "dependencies": {
+    "lowdb": "^1.0.0",
+    "sanitize-html": "^1.19.1"
+  }
 }
