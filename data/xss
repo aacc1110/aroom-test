@@ -1,4 +1,5 @@
-      &lt;script type="text/javascript"&gt;
-alert('merong');
-location.href = 'https://opentutorials.org';
-  &lt;/script&gt;
+     <script type="text/javascript">
+              alert("모바일 기기에서 접속");
+   
+
+  </script>
