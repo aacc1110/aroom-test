@@ -1,0 +1,4 @@
+      &lt;script type="text/javascript"&gt;
+alert('merong');
+location.href = 'https://opentutorials.org';
+  &lt;/script&gt;

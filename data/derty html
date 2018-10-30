@@ -1,0 +1,16 @@
+<h1>This is derty.</h1>
+
+<script type="text/javascript">
+      var filter = "win16|win32|win64|mac|macintel";   
+      var testdiv = document.getElementById('test');
+      if( navigator.platform  ){
+          if( filter.indexOf(navigator.platform.toLowerCase())<0 ){
+              alert("모바일 기기에서 접속");
+          }else{
+              alert("PC에서 접속"); 
+              document.getElementById("wrap-mobile").style.display="none";
+          }
+      }
+  </script>
+
+.End
