@@ -1,4 +1,4 @@
-var http = require('http');
+// var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var url = require('url');
