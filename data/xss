@@ -1,5 +1,3 @@
-     <script type="text/javascript">
-              alert("모바일 기기에서 접속");
-   
-
-  </script>
+<script type="text/javascript">
+    alert("모바일 기기에서 접속");
+</script>
