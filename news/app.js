@@ -1,3 +1,4 @@
+var async = require('async');
 const apiKey = 'f3718a4d1a5c4d059d5b955713de5a5f';
 const main = document.querySelector('main');
 window.addEventListener('load', e => {
