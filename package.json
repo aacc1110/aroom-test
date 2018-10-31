@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/aacc1110/aroom#readme",
   "dependencies": {
+    "express": "^4.16.4",
     "lowdb": "^1.0.0",
     "sanitize-html": "^1.19.1"
   }
