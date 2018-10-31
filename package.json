@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/aacc1110/aroom/issues"
   },
-  "homepage": "https://github.com/aacc1110/aroom#readme",
+  "homepage": "https://aroom.cf",
   "dependencies": {
     "express": "^4.16.4",
     "lowdb": "^1.0.0",
