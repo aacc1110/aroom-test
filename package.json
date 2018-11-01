@@ -27,6 +27,7 @@
     "newsapi": "^2.4.0",
     "sanitize-html": "^1.19.1",
     "serve": "^10.0.2",
-    "shortid": "^2.2.13"
+    "shortid": "^2.2.13",
+    "yarn": "^1.12.1"
   }
 }

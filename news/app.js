@@ -1,44 +1,50 @@
-
 const apiKey = 'f3718a4d1a5c4d059d5b955713de5a5f';
-const main = document.querySelector('main');
-const sourceSelector = document.querySelector('#sourceSelector');
 const defaultSource = 'the-washington-post';
+const sourceSelector = document.querySelector('#sources');
+const newsArticles = document.querySelector('main');
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () =>
+    navigator.serviceWorker.register('sw.js')
+      .then(registration => console.log('Service Worker registered'))
+      .catch(err => 'SW registration failed'));
+}
 
-window.addEventListener('load', async e => {
+window.addEventListener('load', e => {
+  sourceSelector.addEventListener('change', evt => updateNews(evt.target.value));
+  updateNewsSources().then(() => {
+    sourceSelector.value = defaultSource;
     updateNews();
-    await updateSources();
-    sourceSelector.value = defaultSource ;
-
-    sourceSelector.addEventListener('change', e => {
-        updateNews(e.target.value);
-    });
-
+  });
 });
 
-async function updateSources(){
-    const res = await fetch(`https://newsapi.org/v1/sources`);
-    const json = await res.json();
+window.addEventListener('online', () => updateNews(sourceSelector.value));
 
-    sourceSelector.innerHTML = json.sourcemap(src => `<option value="${src.id}">${src.name}</option>`).join('\n');
-
+async function updateNewsSources() {
+  const response = await fetch(`https://newsapi.org/v2/sources?apiKey=${apiKey}`);
+  const json = await response.json();
+  sourceSelector.innerHTML =
+    json.sources
+      .map(source => `<option value="${source.id}">${source.name}</option>`)
+      .join('\n');
 }
 
-async function updateNews() {
-    const res = await fetch(`https://newsapi.org/v2/everything? q = bitcoin & from = 2018-09-30 & sortBy = publishedAt & apiKey = ${apiKey}`);
-    const json = await res.json();
-
-    main.innerHTML = json.articles.map(createArticle).join('\n');
+async function updateNews(source = defaultSource) {
+  newsArticles.innerHTML = '';
+  const response = await fetch(`https://newsapi.org/v2/top-headlines?sources=${source}&sortBy=top&apiKey=${apiKey}`);
+  const json = await response.json();
+  newsArticles.innerHTML =
+    json.articles.map(createArticle).join('\n');
 }
 
-function createArticle(article){
-    return `
-        <div class = "article">
-            <a href="${article.url}">
-                <h2>${article.title}</h2>
-                <img src="${article.urlToImage}">
-                <p>${article.description}</p>
-            </a>
-        </div>
-    `;
+function createArticle(article) {
+  return `
+    <div class="article">
+      <a href="${article.url}">
+        <h2>${article.title}</h2>
+        <img src="${article.urlToImage}" alt="${article.title}">
+        <p>${article.description}</p>
+      </a>
+    </div>
+  `;
 }
