@@ -1,0 +1,10 @@
+{
+  "name": "yarn-babel",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "got": "^9.3.0",
+    "xo": "^0.23.0"
+  }
+}
