@@ -2,6 +2,7 @@ var db = require('./db');
 var template = require('./template.js');
 var url = require('url');
 var qs = require('querystring');
+var sanitizeHtml = require('sanitize-html');
 
 exports.home = function(request, response){
     db.query(`SELECT * FROM topic`, function(error,topics){
@@ -85,10 +86,10 @@ exports.update = function(request, response){
                         <input type="hidden" name="id" value="${queryData.id}">
                     </p>
                     <p>
-                        <input type="text" name="name" value="${author[0].name}" placeholder="name">
+                        <input type="text" name="name" value="${sanitizeHtml(author[0].name)}" placeholder="name">
                     </p>
                     <p>
-                        <textarea name="profile" placeholder="description">${author[0].profile}</textarea>
+                        <textarea name="profile" placeholder="description">${sanitizeHtml(author[0].profile)}</textarea>
                     </p>
                     <p>
                         <input type="submit" value="update">
@@ -103,4 +104,54 @@ exports.update = function(request, response){
             
         });
     });
+}
+
+exports.update_process = function(request, response){
+    var body = '';
+    request.on('data', function(data){
+        body = body + data;
+    });
+    request.on('end', function(){
+        var post = qs.parse(body);
+        db.query(`
+        UPDATE author SET name=?, profile=? WHERE id=?`,
+        [post.name, post.profile, post.id], 
+        function(error, result){
+            if(error){
+                throw error;
+            }
+            response.writeHead(302, {Location: `/author`});
+            response.end();
+            }
+        )   
+    });   
+}
+
+exports.delete_process = function(request, response){
+    var body = '';
+    request.on('data', function(data){
+        body = body + data;
+    });
+    request.on('end', function(){
+        var post = qs.parse(body);
+        db.query(`
+        DELETE FROM topic WHERE author_id=?`,
+        [post.id],
+        function(error, result){
+            if(error){
+                throw error;
+            }
+            db.query(`
+            DELETE FROM author WHERE id=?`,
+            [post.id], 
+            function(error1, result1){
+                if(error1){
+                    throw error1;
+                }
+                response.writeHead(302, {Location: `/author`});
+                response.end();
+                }
+            )   
+        });
+    });   
 }

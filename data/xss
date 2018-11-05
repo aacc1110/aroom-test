@@ -1,5 +1,0 @@
-<h1>This is dirty</h1>
-<script type="text/javascript">
-    alert('모바일 기기에서 접속');
-</script>
-.End
