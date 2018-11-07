@@ -6,8 +6,8 @@ block content
     main
         each user in users
             div.user
-                img(src=user.picture.large)
-                p=user.name.title
-                h2=user.name.first 
-                p=user.name.last
+                img(src=user.picture.large, alt=user.picture.large)
+                p.title=user.name.title
+                h2.user=user.name.first 
+                p.lastname=user.name.last
 

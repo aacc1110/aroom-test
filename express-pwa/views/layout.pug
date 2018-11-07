@@ -6,6 +6,7 @@ html(lang='en')
     meta(name='description', content='A simple nodejs express pwa')
     meta(name='viewport', content='width=device-width')
     link(rel='stylesheet', href='main.css')
+    // the manifest
     link(rel="manifest", href="../manifest.json")
     //if lt IE 9
       script(src='https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js')
@@ -14,4 +15,6 @@ html(lang='en')
     block content
     
     //load the sw
+    //this is the service worker
+    //is the file that loads the service worker better said.
     script(src='loader.js')
