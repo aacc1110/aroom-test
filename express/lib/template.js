@@ -5,6 +5,8 @@ module.exports = {
     <html>
     <head>
       <title>WEB1 - ${title}</title>
+      // the manifest
+      <link rel="manifest" href="manifest.json">
       <meta charset="utf-8">
     </head>
     <body>

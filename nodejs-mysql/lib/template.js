@@ -8,6 +8,7 @@ module.exports = {
     <head>
       <title>WEB1 - ${title}</title>
       <meta charset="utf-8">
+      <link rel="manifest" href="manifest.json">
     </head>
     <body>
       <h1><a href="/">WEB</a></h1>
