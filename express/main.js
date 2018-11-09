@@ -1,14 +1,15 @@
 var express = require('express');
 var app = express();
 var fs = require('fs');
-
+var path = require('path');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 var helmet = require('helmet');
 var indexRouter = require('./routes/index');
 var topicRouter = require('./routes/topic');
+var loginRouter = require('./routes/login');
  
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '/')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
 app.use(helmet());
@@ -20,7 +21,8 @@ app.get('*', function(request, response, next){
 });
 
 app.use('/', indexRouter);
-app.use('/topic', topicRouter); 
+app.use('/topic', topicRouter);
+app.use('/login', loginRouter); 
 
 app.use(function(req, res, next) {
   res.status(404).send('Sorry cant find that!');
