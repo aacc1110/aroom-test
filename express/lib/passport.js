@@ -27,7 +27,7 @@ module.exports = function (app){
     passwordField: 'pwd'
     },
     function (email, password, done) {
-        console.log('LocalStrategy', email, password);
+//        console.log('LocalStrategy', email, password);
         var user = db.get('users').find({
             email: email,
         }).value();

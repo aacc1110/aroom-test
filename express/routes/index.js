@@ -3,7 +3,12 @@
   var template = require('../lib/template.js');
   var auth = require('../lib/auth.js');
 
-router.get('/', function(request, response) { 
+    /* GET home page. */
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express1', name: 'HSC', page: __dirname });
+});
+
+/* router.get('/', function(request, response) { 
 //    console.log('/', request.user);
     var fmsg = request.flash();
     var feedback = '';
@@ -16,10 +21,11 @@ router.get('/', function(request, response) {
     var html = template.HTML(title, list, `
       <div style="color:blue;">${feedback}</div>
       <h2>${title}</h2>${description}
-      <img src="/images/hello.jpg" style="width:300px; display:block; margin-top:10px;">`,
+      `,
       `<a href="/topic/create">create</a>`,
       auth.statusUI(request, response)
     ); 
     response.send(html);
-  });
-  module.exports = router;
+  }); */
+
+module.exports = router;
