@@ -1,4 +1,42 @@
 {
   "users": [
-    ]
+    {
+      "id": "56bMD31zA",
+      "email": "egoing7@gmail.com",
+      "password": "$2b$10$yDxxRw3vCG3uv3tENmGyM..1d6f7sHaiE6dUH61JDGbNLBAeVXaEG",
+      "displayName": "egoing"
+    },
+    {
+      "id": "9h7At8Dn7",
+      "email": "egoing7777@gmail.com",
+      "password": "$2b$10$zbFDOcYSJITKA.7xPf.hfeMf8Y8UfejrZEVJTmQRZ9yc6g2yEzdsi",
+      "displayName": "egoing"
+    }
+  ],
+  "topics": [
+    {
+      "id": "SY1Xx4g9y",
+      "title": "sdfs",
+      "description": "sdfs",
+      "user_id": "56bMD31zA"
+    },
+    {
+      "id": "pdAW94YJQ",
+      "title": "22224",
+      "description": "2222",
+      "user_id": "56bMD31zA"
+    },
+    {
+      "id": "g-zN0z8PP",
+      "title": "ddddddd",
+      "description": "dddd",
+      "user_id": "9h7At8Dn7"
+    },
+    {
+      "id": "Ib_zHJHsC",
+      "title": "auth",
+      "description": "52525",
+      "user_id": "9h7At8Dn7"
+    }
+  ]
 }

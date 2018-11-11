@@ -11,6 +11,7 @@ var FileStore = require('session-file-store')(session);
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var flash =  require ('connect-flash');
+var db = require('./lib/db');
 
 var indexRouter = require('./routes/index');
 var topicRouter = require('./routes/topic');
@@ -29,10 +30,8 @@ app.use(flash());
 var passport = require('./lib/passport')(app);
 
 app.get('*', function(request, response, next){
-  fs.readdir('./data', function(error, filelist){
-    request.list = filelist;
-    next();
-  });
+  request.list = db.get('topics').value();
+  next();
 });
 
 app.use('/', indexRouter);
