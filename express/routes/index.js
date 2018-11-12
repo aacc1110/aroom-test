@@ -3,11 +3,6 @@
   var template = require('../lib/template.js');
   var auth = require('../lib/auth.js');
 
-    /* GET home page. */
-/* router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express1', name: 'HSC', page: __dirname });
-}); */
-
 router.get('/', function (request, response) {
   var fmsg = request.flash();
   var feedback = '';
