@@ -17,8 +17,8 @@ module.exports = function(passport){
     var html = template.HTML(title, list, `
       <div style="color:red;">${feedback}</div>
       <form action="/auth/login_process" method="post">
-      <p><input type="text" name="email" placeholder="email" value="egoing7777@gmail.com"></p>
-      <p><input type="password" name="pwd" autocomplete="off" placeholder="password" value="111111"></p>
+      <p><input type="text" name="email" placeholder="email"></p>
+      <p><input type="password" name="pwd" autocomplete="off" placeholder="password"></p>
       <p>
         <input type="submit" value="login">
       </p>

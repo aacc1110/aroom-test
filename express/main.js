@@ -7,7 +7,6 @@ var helmet = require('helmet');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 var flash =  require ('connect-flash');
 var db = require('./lib/db');
 
