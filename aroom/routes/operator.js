@@ -1,16 +1,20 @@
 var express = require('express');
 var router = express.Router();
 var shortid = require('shortid');
-var db = require('../lib/db');
 var bcrypt = require('bcrypt');
-
-
+var db = require('../lib/db');
+var template = require('../lib/template.js');
+var auth = require('../lib/auth.js');
 
 module.exports = function(passport){
-router.get('/', function(req, res, next) {
-    res.render('operator', 
-    { title: 'operator', name: 'HSC', page: 'Home page' });
-    });  
+router.get('/', function(request, response, next) {
+    db.query(`SELECT * FROM topic`, function(error, topics){
+        var list = template.list(topics);
+        console.log(list[3]);
+        response.render('operator', { title: 'operator', name: 'HSC', page: `${list}` });
+    });
+});
+ 
 
 router.get('/login', function(request, response) { 
     var fmsg = request.flash();
@@ -22,7 +26,7 @@ router.get('/login', function(request, response) {
     var list = template.list(request.list);
     var html = template.HTML(title, list, `
     <div style="color:red;">${feedback}</div>
-    <form action="/auth/login_process" method="post">
+    <form action="/operator/login_process" method="post">
     <p><input type="text" name="email" placeholder="email"></p>
     <p><input type="password" name="pwd" autocomplete="off" placeholder="password"></p>
     <p>
@@ -62,7 +66,7 @@ router.post('/register_process', function (request, response) {
 router.post('/login_process',
     passport.authenticate('local', { 
     successRedirect: '/',
-    failureRedirect: '/auth/login',
+    failureRedirect: '/operator/login',
     failureFlash: true,
     successFlash:true
     }));
@@ -77,7 +81,7 @@ router.get('/register', function (request, response) {
     var list = template.list(request.list);
     var html = template.HTML(title, list, `
         <div style="color:red;">${feedback}</div>
-        <form action="/auth/register_process" method="post">
+        <form action="/operator/register_process" method="post">
         <p><input type="text" name="email" placeholder="email" value="egoing7777@gmail.com"></p>
         <p><input type="password" name="pwd" autocomplete="off" placeholder="password" value="111111"></p>
         <p><input type="password" name="pwd2" autocomplete="off" placeholder="password" value="111111"></p>
