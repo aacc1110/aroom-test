@@ -13,43 +13,46 @@ module.exports = function (app){
     });
 
     passport.deserializeUser(function(id, done) {
-        var user = db.get('users').find({
-            id: id
-        }).value();
-        console.log('deserializeUser', id, user);
-        done(null, user);
-    /*   User.findById(id, function(err, user) {
-        done(err, user);
-    }); */
-    });
-    passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'pwd'
-    },
-    function (email, password, done) {
-//        console.log('LocalStrategy', email, password);
-        var user = db.get('users').find({
-            email: email,
-        }).value();
-        if (user) {
-            bcrypt.compare(password, user.password, function(err,result){
-                if(result){
-                    return done(null, user, {
-                        message: 'Welcome.'
+        db.query('SELECT * FROM operator WHERE id=?'+id, function(err, user){
+            console.log('deserializeUser', id, user);
+            done(null, id);
+        })
+    });    
+
+    passport.use('local_login', new LocalStrategy({
+        usernameField: 'email_login',
+        passwordField: 'pass_login',
+        passReqToCallback: true
+        },
+        function (req, email, password, done) {
+            console.log('LocalStrategy', email, password);
+            db.query('SELECT * FROM operator WHERE email=?', [email], function(err, user){
+                console.log(err); console.log(user);
+                if (err) { return done(err); }
+                if (user.length) {
+                    bcrypt.compare(password, user[0].password, function(err,res){
+                        if(res){
+                            console.log('Welcome');
+                            return done(null, { 'email': email, 'id':user[0].id,
+                                message: 'Welcome.'
+                            });
+                        } else {
+                            console.log('Password is not correct.');
+                            return done(null, false, {                              
+                                message: 'Password is not correct.'
+                            });
+                        }
+        
                     });
                 } else {
+                    console.log('There is no email.');
                     return done(null, false, {
-                        message: 'Password is not correct.'
+                        message: 'There is no email.'
                     });
                 }
+            })
 
-            });
-        } else {
-            return done(null, false, {
-                message: 'There is no email.'
-            });
         }
-    }
-    ));
+        ));
     return passport;
-};
+}

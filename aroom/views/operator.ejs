@@ -1,58 +1,327 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel='stylesheet' href='./public/stylesheets/style.css' />
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
-	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="../public/javascripts/custom-scripting.js"></script>
-	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
-</head> 
+<html lang="ko">
+  <head>
+      <title><%= title %></title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" type="text/css" href="./stylesheets/operator.css">
+      <link rel="stylesheet" type="text/css" href="./stylesheets/demo.css" />
+      <link rel="stylesheet" type="text/css" href="./stylesheets/component.css" />  
+ 
+      <style>
+      html {
+        font-size: calc(14px + 0.3vw);
+      }
+      .panel a#join_pop{
+        display: none;
+      }
+
+      a#login_pop:hover, a#join_pop:hover {
+          border-color: #eee;
+      }
+      .overlay {
+          background-color: rgba(0, 0, 0, 0.6);
+          bottom: 0;
+          cursor: default;
+          left: 0;
+          opacity: 0;
+          position: fixed;
+          right: 0;
+          top: 0;
+          visibility: hidden;
+          z-index: 1;
+
+          -webkit-transition: opacity .5s;
+          -moz-transition: opacity .5s;
+          -ms-transition: opacity .5s;
+          -o-transition: opacity .5s;
+          transition: opacity .5s;
+      }
+      .overlay:target {
+          visibility: visible;
+          opacity: 1;
+      }
+      .popup {
+          background-color: #fff;
+          border: 3px solid #fff;
+          display: inline-block;
+          left: 50%;
+          opacity: 0;
+          padding: 15px;
+          position: fixed;
+          text-align: justify;
+          top: 40%;
+          visibility: hidden;
+          z-index: 10;
+
+          -webkit-transform: translate(-50%, -50%);
+          -moz-transform: translate(-50%, -50%);
+          -ms-transform: translate(-50%, -50%);
+          -o-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+
+          -webkit-border-radius: 10px;
+          -moz-border-radius: 10px;
+          -ms-border-radius: 10px;
+          -o-border-radius: 10px;
+          border-radius: 10px;
+
+          -webkit-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+          -moz-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+          -ms-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+          -o-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+          box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+
+          -webkit-transition: opacity .5s, top .5s;
+          -moz-transition: opacity .5s, top .5s;
+          -ms-transition: opacity .5s, top .5s;
+          -o-transition: opacity .5s, top .5s;
+          transition: opacity .5s, top .5s;
+      }
+      .overlay:target+.popup {
+          top: 50%;
+          opacity: 1;
+          visibility: visible;
+      }
+      .close {
+          background-color: rgba(0, 0, 0, 0.8);
+          height: 30px;
+          line-height: 30px;
+          position: absolute;
+          right: 0;
+          text-align: center;
+          text-decoration: none;
+          top: -15px;
+          width: 30px;
+
+          -webkit-border-radius: 15px;
+          -moz-border-radius: 15px;
+          -ms-border-radius: 15px;
+          -o-border-radius: 15px;
+          border-radius: 15px;
+      }
+      .close:before {
+          color: rgba(255, 255, 255, 0.9);
+          content: "X";
+          font-size: 24px;
+          text-shadow: 0 -1px rgba(0, 0, 0, 0.9);
+      }
+      .close:hover {
+          background-color: rgba(139, 214, 214, 0.8);
+      }
+      .popup p, .popup div {
+          margin-bottom: 10px;
+      }
+      .popup label {
+          display: inline-block;
+          text-align: left;
+          width: 120px;
+      }
+      .popup input[type="text"], .popup input[type="password"], .popup input[type="email"] {
+          border: 1px solid;
+          border-color: #999 #ccc #ccc;
+          margin: 0;
+          padding: 2px;
+
+          -webkit-border-radius: 2px;
+          -moz-border-radius: 2px;
+          -ms-border-radius: 2px;
+          -o-border-radius: 2px;
+          border-radius: 2px;
+      }
+      .popup input[type="text"]:hover, .popup input[type="password"], .popup input[type="email"]:hover {
+          border-color: #555 #888 #888;
+      }
+    </style>
+  <script type="text/javascript">
+    function passCheck(){
+    if(signup_fom.pass.value != signup_fom.pass1.value) {
+      signup_fom.pass1.setCustomValidity("Passwords Don't Match");
+    } else {
+      signup_fom.pass1.setCustomValidity('');
+      };
+    }
+  </script>   
+  </head>
+
 <body>
+<header>
+  <nav class="navbar-header">
+    <h2><a href="#">Operator</a></h2>
+  
+    <form action="#" method="post" class="search-form">
+      <input type="search" class="search-field" pattern="[^'\x22]+" title="Invalid serarch">
+      <input type="submit" value="Go">
+    </form>
+      <!-- panel with buttons -->
+      <div class="panel">
+          <a href="#login_form" id="login_pop"><img src="./images/user2.png"></a>
+          <a href="#join_form" id="join_pop">Sign</a>
+      </div>
+</nav><%- page%>
+  <!-- popup form #1 -->
+  <a href="#x" class="overlay" id="login_form"></a>
+  <div class="popup">
+    <form id="login-form" action="./operator/login_process" method="POST">
+      <h1>Welcome Guest!<h1>
+      <p>Please enter your login and password here</p>
+      <div>
+          <label for="email">Login (Email)</label>
+          <input type="email" name="email_login" id="email-login" required placeholder="email address" autocomplete="username" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" autofocus />
+      </div>
+      <div>
+          <label for="password">Password</label>
+          <input type="password" name="pass_login" id="pass-login" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="하나 이상의 숫자와 8 자 이상의 대소 문자를 입력해주세요." autocomplete="current-password" required />
+      </div>
+      <input type="submit" id="login" value="Log In"/> or <a href="#join_form" id="join_pop">Sign In</a>
 
-<!-- Start of first page -->
-<div data-role="page" id="foo">
+      <a class="close" href="#close"></a>
+    </form>
+  </div>
 
-	<div data-role="header" data-position="fixed">
-		<h1>Foo</h1>
-	</div><!-- /header -->
+  <!-- popup form #2 -->
+  <a href="#x" class="overlay" id="join_form"></a>
+  <div class="popup">
+    <form id="join-form" action="./operator/register_process" method="POST">      
+      <h1>Sign Up</h1>
+      <div id="pan">Please enter your details here</div>
+      <div>
+          <label for="email">Login (Email)</label>
+          <input type="email" name="email_join" id="email-join" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="email address" autocomplete="username" autofocus required />
+      </div>
+      <div>
+          <label for="pass">Password</label>
+          <input type="password" name="pass_join" id="pass-join" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="하나 이상의 숫자와 8 자 이상의 대소 문자를 입력해주세요." autocomplete="new-password" required />
+      </div>
+      <div>
+          <label for="pass1">Password</label>
+          <input type="password" name="pass1_join" id="pass1-join" onblur="passCheck();" autocomplete="new-password" required />
+      </div>
+      <div>
+          <label for="nick name">Nick name</label>
+          <input type="text" name="nickname" id="nickname" pattern="[A-Za-z0-9]{2,10}+\S" title="문자/숫자로 2~10자 미만 " required />
+      </div>
+      <input type="submit" id="signup" value="Sign Up"> or <a href="#login_form" id="login_pop">Log In</a>
 
-	<div data-role="content">
-    <body> 
-    <h1><%= title %></h1>
-    <h2><%= name %></h2>
-    <p>Wellcom to <%= title %></p>
-    <p>Wellcom to <%- page %></p>
-    <p><a href="/"> HOME/INDEX </a></p>
+      <a class="close" href="#close"></a>
+    </form>        
+  </div>
+</header>
+  
+<main>
+  	<div class="container">
+        <div id="tabs" class="tabs">
+          <nav>
+            <ul>
+              <li><a href="#section-1" class="icon-shop"><span>Shop</span></a></li>
+              <li><a href="#section-2" class="icon-cup"><span>Drinks</span></a></li>
+              <li><a href="#section-3" class="icon-food"><span>Food</span></a></li>
+              <li><a href="#section-4" class="icon-lab"><span>Lab</span></a></li>
+              <li><a href="#section-5" class="icon-truck"><span>Order</span></a></li>
+            </ul>
+          </nav>
+          <div class="content">
+            <section id="section-1">
+              <div class="mediabox">
+                <img src="./images/01.png" alt="img01" />
+                <h3>Sushi Gumbo Beetroot</h3>
+                <p>Sushi gumbo beet greens corn soko endive gumbo gourd. Parsley shallot courgette tatsoi pea sprouts fava bean collard greens dandelion okra wakame tomato.</p>
+              </div>
+              <div class="mediabox">
+                <img src="./images/02.png" alt="img02" />
+                <h3>Pea Sprouts Fava Soup</h3>
+                <p>Lotus root water spinach fennel kombu maize bamboo shoot green bean swiss chard seakale pumpkin onion chickpea gram corn pea.</p>
+              </div>
+              <div class="mediabox">
+                <img src="./images/03.png" alt="img03" />
+                <h3>Turnip Broccoli Sashimi</h3>
+                <p>Nori grape silver beet broccoli kombu beet greens fava bean potato quandong celery. Bunya nuts black-eyed pea prairie turnip leek lentil turnip greens parsnip.</p>
+              </div>
+            </section>
+            <section id="section-2">
+              <div class="mediabox">
+                <img src="./images/04.png" alt="img04" />
+                <h3>Asparagus Cucumber Cake</h3>
+                <p>Chickweed okra pea winter purslane coriander yarrow sweet pepper radish garlic brussels sprout groundnut summer purslane earthnut pea tomato spring onion azuki bean gourd. </p>
+              </div>
+              <div class="mediabox">
+                <img src="./images/05.png" alt="img05" />
+                <h3>Magis Kohlrabi Gourd</h3>
+                <p>Salsify taro catsear garlic gram celery bitterleaf wattle seed collard greens nori. Grape wattle seed kombu beetroot horseradish carrot squash brussels sprout chard.</p>
+              </div>
+              <div class="mediabox">
+                <img src="./images/06.png" alt="img06" />
+                <h3>Ricebean Rutabaga</h3>
+                <p>Celery quandong swiss chard chicory earthnut pea potato. Salsify taro catsear garlic gram celery bitterleaf wattle seed collard greens nori. </p>
+              </div>
+            </section>
+            <section id="section-3">
+              <div class="mediabox">
+                <img src="./images/02.png" alt="img02" />
+                <h3>Noodle Curry</h3>
+                <p>Lotus root water spinach fennel kombu maize bamboo shoot green bean swiss chard seakale pumpkin onion chickpea gram corn pea.Sushi gumbo beet greens corn soko endive gumbo gourd.</p>
+              </div>
+              <div class="mediabox">
+                <img src="./images/06.png" alt="img06" />
+                <h3>Leek Wasabi</h3>
+                <p>Sushi gumbo beet greens corn soko endive gumbo gourd. Parsley shallot courgette tatsoi pea sprouts fava bean collard greens dandelion okra wakame tomato.</p>
+              </div>
+              <div class="mediabox">
+                <img src="./images/01.png" alt="img01" />
+                <h3>Green Tofu Wrap</h3>
+                <p>Pea horseradish azuki bean lettuce avocado asparagus okra. Kohlrabi radish okra azuki bean corn fava bean mustard tigernut wasabi tofu broccoli mixture soup.</p>
+              </div>
+            </section>
+            <section id="section-4">
+              <div class="mediabox">
+                <img src="./images/03.png" alt="img03" />
+                <h3>Tomato Cucumber Curd</h3>
+                <p>Chickweed okra pea winter purslane coriander yarrow sweet pepper radish garlic brussels sprout groundnut summer purslane earthnut pea tomato spring onion azuki bean gourd. </p>
+              </div>
+              <div class="mediabox">
+                <img src="./images/01.png" alt="img01" />
+                <h3>Mushroom Green</h3>
+                <p>Salsify taro catsear garlic gram celery bitterleaf wattle seed collard greens nori. Grape wattle seed kombu beetroot horseradish carrot squash brussels sprout chard.</p>
+              </div>
+              <div class="mediabox">
+                <img src="./images/04.png" alt="img04" />
+                <h3>Swiss Celery Chard</h3>
+                <p>Celery quandong swiss chard chicory earthnut pea potato. Salsify taro catsear garlic gram celery bitterleaf wattle seed collard greens nori. </p>
+              </div>
+            </section>
+            <section id="section-5">
+              <div class="mediabox">
+                <img src="./images/02.png" alt="img02" />
+                <h3>Radish Tomato</h3>
+                <p>Catsear cauliflower garbanzo yarrow salsify chicory garlic bell pepper napa cabbage lettuce tomato kale arugula melon sierra leone bologi rutabaga tigernut.</p>
+              </div>
+              <div class="mediabox">
+                <img src="./images/06.png" alt="img06" />
+                <h3>Fennel Wasabi</h3>
+                <p>Sea lettuce gumbo grape kale kombu cauliflower salsify kohlrabi okra sea lettuce broccoli celery lotus root carrot winter purslane turnip greens garlic.</p>
+              </div>
+              <div class="mediabox">
+                <img src="./images/01.png" alt="img01" />
+                <h3>Red Tofu Wrap</h3>
+                <p>Green horseradish azuki bean lettuce avocado asparagus okra. Kohlrabi radish okra azuki bean corn fava bean mustard tigernut wasabi tofu broccoli mixture soup.</p>
+              </div>
+            </section>
+          </div><!-- /content -->
+        </div><!-- /tabs -->
+    
+      </div>
+      <script src="./javascripts/cbpFWTabs.js"></script>
+      <script>
+        new CBPFWTabs( document.getElementById( 'tabs' ) );
+      </script>
 
-</body>
-		<p> I'm shown as the page.</p>
-		<p>View internal page called <a href="#bar">bar</a></p>
-	</div><!-- /content -->
+ 
+</main>
 
-	<div data-role="footer" data-position="fixed">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
-</div><!-- /page -->
 
-<!-- Start of second page -->
-<div data-role="page" id="bar">
+<footer>
 
-	<div data-role="header" data-position="fixed">
-		<h1>Bar</h1>
-	</div><!-- /header -->
+</footer>
+  </body>
 
-	<div data-role="content">
-		<p>I'm the second in the source order so I'm hidden when the page loads. I'm just shown if a link that references my id is beeing clicked.</p>
-		<p><a href="#foo">Back to foo</a></p>
-	</div><!-- /content -->
-
-	<div data-role="footer" data-position="fixed">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
-</div><!-- /page -->
-</body>
 </html>

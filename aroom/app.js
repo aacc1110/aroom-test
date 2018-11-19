@@ -1,13 +1,18 @@
-var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var bodyParser = require('body-parser');
+var compression = require('compression');
+var helmet = require('helmet');
+var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
 var passport = require('passport');
+var flash =  require ('connect-flash');
+var logger = require('morgan');
+var db = require('./lib/db');
 
 var indexRouter = require('./routes/index');
-var operatorRouter = require('./routes/operator')(passport);
 var usersRouter = require('./routes/users');
+var operatorRouter = require('./routes/operator')(passport);
 
 var app = express();
 
@@ -18,9 +23,29 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/')));
+app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(compression());
+app.use(helmet.hsts({
+  maxAge: 10886400000,
+  includeSubdomains: true
+}));
+app.use(session({
+  key: 'session_cookie_name',
+  secret: '4215DIELS.@ASD3221!@#asd',
+  resave: false,
+  saveUninitialized: true,
+  store: new MySQLStore({
+    host: 'localhost',
+    port: '3306',
+    user: 'root',
+    password: '111111',
+    database: 'aroom'
+  })
+}));
+app.use(flash());
+var passport = require('./lib/passport')(app);
 
 app.use('/', indexRouter);
 app.use('/operator', operatorRouter);
@@ -41,5 +66,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-//app.listen(3000, () => console.log('Example app listening on port 3000!'))
-module.exports = app;
+app.listen(3000, () => console.log('Example app listening on port 3000!'))
+// module.exports = app;

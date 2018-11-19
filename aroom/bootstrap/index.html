@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
       <title></title>
       <meta charset="UTF-8">
@@ -134,16 +134,13 @@
       }
     </style>
   <script type="text/javascript">
-    function validatePassword(){
-    var password = document.getElementById("pass");
-    var confirm_password = document.getElementById("pass1");
-
-    if(password.value != confirm_password.value) {
-      confirm_password.setCustomValidity("Passwords Don't Match");
+    function passCheck(){
+    if(signup_fom.pass.value != signup_fom.pass1.value) {
+      signup_fom.pass1.setCustomValidity("Passwords Don't Match");
     } else {
-      confirm_password.setCustomValidity('');
+      signup_fom.pass1.setCustomValidity('');
+      };
     }
-  }
   </script>   
   </head>
 
@@ -153,7 +150,7 @@
     <h2><a href="#">Operator</a></h2>
   
     <form action="#" method="post" class="search-form">
-      <input type="search" class="search-field" pattern="[^'\x22]+" title="Invalid input">
+      <input type="search" class="search-field" pattern="[^'\x22]+" title="Invalid serarch">
       <input type="submit" value="Go"> 
     </form>
       <!-- panel with buttons -->
@@ -172,7 +169,7 @@
       <p>Please enter your login and password here</p>
       <div>
           <label for="email">Login (Email)</label>
-          <input type="email" id="email" required placeholder="email address" autofocus>
+          <input type="email" id="email" required placeholder="email address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" autofocus />
       </div>
       <div>
           <label for="password">Password</label>
@@ -192,21 +189,21 @@
       <div id="pan">Please enter your details here</div>
       <div>
           <label for="email">Login (Email)</label>
-          <input type="email" id="email1" required placeholder="email address" autofocus>
+          <input type="email" id="email1" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="email address" autofocus />
       </div>
       <div>
           <label for="pass">Password</label>
-          <input type="password" id="pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="하나 이상의 숫자와 8 자 이상의 대소 문자를 입력해주세요."  required >
+          <input type="password" id="pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="하나 이상의 숫자와 8 자 이상의 대소 문자를 입력해주세요."  required />
       </div>
       <div>
           <label for="pass1">Password</label>
-          <input type="password" id="pass1" onblur="validatePassword();" required>
+          <input type="password" id="pass1" onblur="passCheck();" required />
       </div>
       <div>
           <label for="nick name">Nick name</label>
-          <input type="text" id="nickname" pattern="[A-Za-z0-9]+" title="문자 및 숫자 만, 구두점 또는 특수 문자 없음" required>
+          <input type="text" id="nickname" pattern="[A-Za-z0-9]+" title="문자 및 숫자 만, 구두점 또는 특수 문자 없음" required />
       </div>
-      <input type="submit" id="signup" value="Sign Up" /> or <a href="#login_form" id="login_pop">Log In</a>
+      <input type="submit" id="signup" value="Sign Up"> or <a href="#login_form" id="login_pop">Log In</a>
 
       <a class="close" href="#close"></a>
     </form>        
