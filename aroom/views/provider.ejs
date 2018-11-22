@@ -1,0 +1,56 @@
+  <!-- popup form #entry -->
+  <a href="#x" class="overlay" id="entry_form"></a>
+  <div class="popup">
+    <form id="entry-form" action="/provider/provider_process" method="POST">
+        <div>
+          <label for="item">ITEM</label>
+            <select name="item" id="item" required >
+            <option value="고시원">Option one</option>
+            <option value="원룸">Option two</option>
+            <option value="싱글하우스">Option three</option>
+          </select>
+      </div>
+      <div>
+          <label for="item">ITEM</label>
+            <select name="item" id="item" required >
+            <option value="고시원">Option one</option>
+            <option value="원룸">Option two</option>
+            <option value="싱글하우스">Option three</option>
+          </select>
+      </div>
+      <div>
+          <label for="title">TITLE *</label>
+          <input type="text" name="title" id="title" autofocus="autofocus" maxlength="20" required />
+      </div>
+      <div>
+          <label for="sex">SEX *</label>
+          <input type="radio" name="sex" value="public" checked="checked" />public
+          <input type="radio" name="sex" value="man" />man
+          <input type="radio" name="sex" value="woman" />woman
+      </div>      
+      <div>
+          <label for="address">ADDRESS *</label>
+          <input type="text" name="address" id="address" size="40" maxlength="50" required />
+      </div>
+      <div>
+          <label for="price_min">PRICE *</label>
+          <input type="number" name="price_min" id="price_min" min="5" max="99" required />
+          <input type="number" name="price_max" id="price_max" min="5" max="99" required />
+      </div>
+      <div>
+          <label for="phone">PHONE</label>
+          <input type="text" name="phone" id="phone" maxlength="13" placeholder="ex): 010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required />
+      </div>
+      <div>
+          <label for="off_side">OFF_SIDE</label>
+          <input type="checkbox" name="elevator" id="elevator" />elevator
+          <input type="checkbox" name="parking" id="parking" />parking
+      </div>
+      <div>
+          <label for="memo">MEMO</label>
+          <textarea rows="4" cols="43" name="memo" id="memo" maxlength="100" placeholder="100자 이내"></textarea>
+      </div>                                         
+      <input type="submit" id="addup" value="ADD Up">
+      <a class="close" href="#close"></a>    
+    </form>
+  </div>

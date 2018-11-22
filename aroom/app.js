@@ -13,6 +13,7 @@ var db = require('./lib/db');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var operatorRouter = require('./routes/operator')(passport);
+var providerRouter = require('./routes/provider');
 
 var app = express();
 
@@ -49,6 +50,7 @@ var passport = require('./lib/passport')(app);
 
 app.use('/', indexRouter);
 app.use('/operator', operatorRouter);
+app.use('/provider', providerRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

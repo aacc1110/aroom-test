@@ -16,7 +16,7 @@
         display: none;
       }
 
-      a#login_pop:hover, a#join_pop:hover {
+      a#login_pop:hover, a#join_pop:hover, a#entry_pop:hover {
           border-color: #eee;
       }
       .overlay {
@@ -155,19 +155,25 @@
     </form>
       <!-- panel with buttons -->
       <div class="panel">
-          <a href="#login_form" id="login_pop"><img src="./images/user2.png"></a>
+        <a href="#login_form" id="login_pop">
+        <% if (name.length > 0) { %>
+          <a href="/operator/logout"><%= name %> / logout</a>
+          <a href="#entry_form" id="entry_pop"><input type="button" value="등록" /></a>
+          <a href="/provider" target="_blank"><input type="button" value="등록새창" /></a>
+        <% } %>
+          <img src="./images/user2.png"></a>          
           <a href="#join_form" id="join_pop">Sign</a>
       </div>
 </nav><%- page%>
   <!-- popup form #1 -->
   <a href="#x" class="overlay" id="login_form"></a>
   <div class="popup">
-    <form id="login-form" action="./operator/login_process" method="POST">
+    <form id="login-form" action="/operator/login_process" method="POST" autocomplete="on">
       <h1>Welcome Guest!<h1>
       <p>Please enter your login and password here</p>
       <div>
           <label for="email">Login (Email)</label>
-          <input type="email" name="email_login" id="email-login" required placeholder="email address" autocomplete="username" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" autofocus />
+          <input type="email" name="email_login" id="email-login" required placeholder="email address" autocomplete="username" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" autofocus="autofocus" />
       </div>
       <div>
           <label for="password">Password</label>
@@ -182,12 +188,12 @@
   <!-- popup form #2 -->
   <a href="#x" class="overlay" id="join_form"></a>
   <div class="popup">
-    <form id="join-form" action="./operator/register_process" method="POST">      
+    <form id="join-form" action="/operator/register_process" method="POST">      
       <h1>Sign Up</h1>
       <div id="pan">Please enter your details here</div>
       <div>
           <label for="email">Login (Email)</label>
-          <input type="email" name="email_join" id="email-join" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="email address" autocomplete="username" autofocus required />
+          <input type="email" name="email_join" id="email-join" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="email address" autocomplete="username" autofocus="autofocus" required />
       </div>
       <div>
           <label for="pass">Password</label>
@@ -206,9 +212,58 @@
       <a class="close" href="#close"></a>
     </form>        
   </div>
+    <!-- popup form #entry -->
+  <a href="#x" class="overlay" id="entry_form"></a>
+  <div class="popup">
+    <form id="entry-form" action="/provider/provider_process" method="POST">
+      <div>
+          <label for="item">ITEM</label>
+            <select name="item" id="item" required >
+            <option value="고시원">Option one</option>
+            <option value="원룸">Option two</option>
+            <option value="싱글하우스">Option three</option>
+          </select>
+      </div>
+      <div>
+          <label for="title">TITLE *</label>
+          <input type="text" name="title" id="title" autofocus="autofocus" maxlength="20" required />
+      </div>
+      <div>
+          <label for="sex">SEX *</label>
+          <input type="radio" name="sex" value="public" checked="checked" />public
+          <input type="radio" name="sex" value="man" />man
+          <input type="radio" name="sex" value="woman" />woman
+      </div>      
+      <div>
+          <label for="address">ADDRESS *</label>
+          <input type="text" name="address" id="address" size="40" maxlength="50" required />
+      </div>
+      <div>
+          <label for="price_min">PRICE *</label>
+          <input type="number" name="price_min" id="price_min" min="5" max="99" required />
+          <input type="number" name="price_max" id="price_max" min="5" max="99" required />
+      </div>
+      <div>
+          <label for="phone">PHONE</label>
+          <input type="text" name="phone" id="phone" maxlength="13" placeholder="ex): 010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required />
+      </div>
+      <div>
+          <label for="off_side">OFF_SIDE</label>
+          <input type="checkbox" name="elevator" id="elevator" />elevator
+          <input type="checkbox" name="parking" id="parking" />parking
+      </div>
+      <div>
+          <label for="memo">MEMO</label>
+          <textarea rows="4" cols="43" name="memo" id="memo" maxlength="100" placeholder="100자 이내"></textarea>
+      </div>                                         
+      <input type="submit" id="addup" value="ADD Up">
+      <a class="close" href="#close"></a>    
+    </form>
+  </div>
 </header>
   
 <main>
+
   	<div class="container">
         <div id="tabs" class="tabs">
           <nav>
