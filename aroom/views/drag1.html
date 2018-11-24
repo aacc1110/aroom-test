@@ -1,61 +1,162 @@
 <!DOCTYPE html>
-<html>
-  <head>
-        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 
-      <style>
- .uploader {
-    position:relative; 
-    overflow:hidden; 
-    width:300px; 
-    height:350px;
-    background:#f3f3f3; 
-    border:2px dashed #e8e8e8;
+<style>
+ #drop_area {
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  width: 60%;
+  font-family: sans-serif;
+  margin: 100px auto;
+  padding: 20px;
 }
-
-#filePhoto{
-    position:absolute;
-    width:300px;
-    height:400px;
-    top:-50px;
-    left:0;
-    z-index:2;
-    opacity:0;
-    cursor:pointer;
+#drop_area.highlight {
+  border-color: purple;
 }
-
-.uploader img{
-    position:absolute;
-    width:302px;
-    height:352px;
-    top:-1px;
-    left:-1px;
-    z-index:1;
-    border:none;
+p {
+  margin-top: 0;
 }
-      </style>
-   </head>
+.my-form {
+  margin-bottom: 10px;
+}
+#gallery {
+  margin-top: 10px;
+}
+#gallery img {
+  width: 150px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.button {
+  display: inline-block;
+  padding: 10px;
+  background: #ccc;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+.button:hover {
+  background: #ddd;
+}
+#fileElem {
+  display: none;
+}
+</style>
+</head>
   
   <body>
-        <div class="uploader" onclick="$('#filePhoto').click()">
-                click here or drag here your images for preview and set userprofile_picture data
-                <img src=""/>
-                <input type="file" name="userprofile_picture"  id="filePhoto" />
-            </div>
+    <div id="drop_area">
+        <form class="my_form">
+          <div id="de"><p>무료등록은 5개까지 가능합니다.1M 1024* 768에 최적화되었습니다.</p></div>
+          <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+          <label class="button" for="fileElem">Select Images</label>
+          <div id="gallery"></div>
+        </form>
+      </div>
 
 
-      <script type="text/javascript">
-            var imageLoader = document.getElementById('filePhoto');
-            imageLoader.addEventListener('change', handleImage, false);
+<script type="text/javascript">
+  let dropArea = document.getElementById('drop_area')
+  
+  ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function(eventName) {
+    dropArea.addEventListener(eventName, preventDefaults, false)
+  })
+  
+  function preventDefaults (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  ;['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false)
+  })
+  
+  ;['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false)
+  })
+  
+  function highlight(e) {
+    dropArea.classList.add('highlight')
+  }
+  
+  function unhighlight(e) {
+    dropArea.classList.remove('highlight')
+  }
+  
+  dropArea.addEventListener('drop', handleDrop, false)
+  
+  function handleDrop(e) {
+    let dt = e.dataTransfer
+    let files = dt.files
+  
+    handleFiles(files)
+  }
+  
+  function handleFiles(files) {
+    files = [...files]
+    if (files.length > 5){
+      document.getElementById("de").style.color = "#ff0000";
+    }  
+    for (var i = 0; i < 5; i++) {
+      let reader = new FileReader()
 
-            function handleImage(e) {
-                var reader = new FileReader();
-                reader.onload = function (event) {
-                    $('.uploader img').attr('src',event.target.result);
-                }
-                reader.readAsDataURL(e.target.files[0]);
-            }
-        </script>      
+      reader.readAsDataURL(files[i])
+      reader.onloadend = function() {
+        let img = document.createElement('img')
+        img.src = reader.result
+        document.getElementById('gallery').appendChild(img)
+      }
+      var formData = new FormData();
+      var url = 'http://localhost:3000/provider/uploads'
+    
+      formData.append('image', files[i]);
+   
+      fetch(url, {
+        method: 'POST',
+        enctype: 'multipart/form-data',
+        body: formData
+      })
+      .then() // <- Add `progressDone` call here
+      .catch((error) => { console.log('false'); })      
+      }       
+//      files.forEach(previewFile);
+//      files.forEach(uploadFile);
+  }
+
+  function previewFile(file) {
+    alert(file);
+    let reader = new FileReader()
+  
+    reader.readAsDataURL(file)
+    reader.onloadend = function() {
+      let img = document.createElement('img')
+      img.src = reader.result
+      document.getElementById('gallery').appendChild(img)
+    }
+  }
+
+  function uploadFile(file) {
+    var formData = new FormData();
+    var url = 'http://localhost:3000/provider/uploads'
+    
+    formData.append('image', file);
+    //alert(formData.name);
+  
+    fetch(url, {
+      method: 'POST',
+      enctype: 'multipart/form-data',
+      body: formData
+    })
+    .then() // <- Add `progressDone` call here
+    .catch((error) => { console.log('false'); })
+  }
+</script>       
     
   </body>
 </html>

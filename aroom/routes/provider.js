@@ -5,7 +5,29 @@ var template = require('../lib/template.js');
 var shortid = require('shortid');
 var db = require('../lib/db');
 var bcrypt = require('bcrypt');
+var multer = require('multer');
 
+
+var storage = multer.diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+      },
+      filename: function (req, file, cb) {
+        cb(null, new Date().valueOf() + path.extname(file.originalname));
+      }
+    });
+
+var upload = multer({ storage: storage, limits: { size: 1048576} }).array('image');
+
+
+router.post('/uploads', upload, (request, response) =>{
+    if(!request.files){
+        console.log('No file received');
+    } else{
+        console.log('file received');
+        console.log(request.files);
+    }
+});
 /* module.exports = function(passport){ */
 router.get('/', function(request, response, next) {
     console.log(request.user.email);
