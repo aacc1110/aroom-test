@@ -132,6 +132,7 @@ input[type="number"]::-webkit-inner-spin-button {
 </head>
   
   <body>
+  <%= page %>
   <div id="drop_area">
       <form id="entry-form" action="/provider/uploads" method="POST" enctype = "multipart/form-data">
 <!--    <form class="my_form" action="#">  -->
@@ -143,7 +144,7 @@ input[type="number"]::-webkit-inner-spin-button {
 <!--    </form> -->
   </div>
   <div class="popup">
-<!--    <form id="entry-form" action="/provider/provider_process" method="POST"> -->
+    <form id="entry-form" action="/provider/provider_process" method="POST">
       <div>
           <label for="item_type">ITEM *</label>
             <select name="item_type" id="item_type" required >
@@ -156,17 +157,17 @@ input[type="number"]::-webkit-inner-spin-button {
           <label for="title">TITLE *</label>
           <input type="text" name="title" id="title" autofocus="autofocus" maxlength="20" required />
       </div>
-<!--      <div>
+      <div>
           <label for="sex">SEX *</label>
           <input type="radio" name="sex" value="public" checked="checked" />public
           <input type="radio" name="sex" value="man" />man
           <input type="radio" name="sex" value="woman" />woman
-      </div>     --> 
+      </div>      
       <div>
           <label for="address">ADDRESS *</label>
           <input type="text" name="address" id="address" size="40" maxlength="50" required />
       </div>
-<!--      <div>
+      <div>
           <label for="price_min">PRICE *</label>
           <input type="number" name="price_min" id="price_min" min="5" max="99" required /> - 
           <input type="number" name="price_max" id="price_max" min="5" max="99" required />
@@ -179,7 +180,7 @@ input[type="number"]::-webkit-inner-spin-button {
           <label for="off_side">OFF_SIDE</label>
           <input type="checkbox" name="elevator" id="elevator" value="elevator" />elevator
           <input type="checkbox" name="parking" id="parking" value="parking" />parking
-      </div>    -->                               
+      </div>                                  
       <input type="submit" id="addup" value="ADD UP">
       <input type="reset" id="resets" value="RESET">
       <a class="close" href="#close"></a>    

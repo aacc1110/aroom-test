@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>provider</title>
+    <title>imgTest</title>
 
 <style>
  #drop_area  {
@@ -122,93 +122,28 @@ table, tr, td{
     bottom: 8px;
     left: 16px;
 }
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
+
 
 </style>
 </head>
   
   <body>
   <div id="drop_area">
-      <form id="entry-form" action="/provider/uploads" method="POST" enctype = "multipart/form-data">
-<!--    <form class="my_form" action="#">  -->
-      <input type="file" id="fileElem" name="image" multiple accept="image/*" onchange="handleFiles(this.files)">
+    <form class="my_form" action="#">
+      <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
       <label class="button" for="fileElem">Select Images</label>
       <div id="gallery"></div>               
       <p id="de">이미지5개까지 무료등록후 출력순서를 클릭해주세요.<br>
         [용량:600KB, SIZE:640*360(16:9) 사이즈에 최적화되었습니다.]</p>
-<!--    </form> -->
-  </div>
-  <div class="popup">
-<!--    <form id="entry-form" action="/provider/provider_process" method="POST"> -->
-      <div>
-          <label for="item_type">ITEM *</label>
-            <select name="item_type" id="item_type" required >
-            <option value="고시원">Option one</option>
-            <option value="원룸">Option two</option>
-            <option value="싱글하우스">Option three</option>
-          </select>
-      </div>
-      <div>
-          <label for="title">TITLE *</label>
-          <input type="text" name="title" id="title" autofocus="autofocus" maxlength="20" required />
-      </div>
-<!--      <div>
-          <label for="sex">SEX *</label>
-          <input type="radio" name="sex" value="public" checked="checked" />public
-          <input type="radio" name="sex" value="man" />man
-          <input type="radio" name="sex" value="woman" />woman
-      </div>     --> 
-      <div>
-          <label for="address">ADDRESS *</label>
-          <input type="text" name="address" id="address" size="40" maxlength="50" required />
-      </div>
-<!--      <div>
-          <label for="price_min">PRICE *</label>
-          <input type="number" name="price_min" id="price_min" min="5" max="99" required /> - 
-          <input type="number" name="price_max" id="price_max" min="5" max="99" required />
-      </div>
-      <div>
-          <label for="phone">PHONE *</label>
-          <input type="tel" name="phone_mobile" id="phone_mobile" maxlength="13" placeholder="ex): 010-0000-0000." pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}" required />
-      </div>
-      <div>
-          <label for="off_side">OFF_SIDE</label>
-          <input type="checkbox" name="elevator" id="elevator" value="elevator" />elevator
-          <input type="checkbox" name="parking" id="parking" value="parking" />parking
-      </div>    -->                               
-      <input type="submit" id="addup" value="ADD UP">
-      <input type="reset" id="resets" value="RESET">
-      <a class="close" href="#close"></a>    
     </form>
   </div>
+  
 <script type="text/javascript">
   /**
     * 중복서브밋 방지
     * 
     * @returns {Boolean}
     */
-  document.getElementById('addup').addEventListener('click', submit_in, false);
-
-  var doubleSubmitFlag = false;
-  function doubleSubmitCheck(){
-      if(doubleSubmitFlag){
-//          alert("다중클릭"); 
-          return doubleSubmitFlag;
-      }else{
-//          alert("등록"); 
-          doubleSubmitFlag = true;
-          return false;
-      }
-  }
-
-  function submit_in(){
-      if(doubleSubmitCheck()) return;
-  }
-
   let dropArea = document.getElementById('drop_area');
   
   ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function(eventName) {
@@ -255,6 +190,7 @@ input[type="number"]::-webkit-inner-spin-button {
     var imgs = document.querySelectorAll('img');
     var sum = index + imgs.length;
     var tagName = file.name+file.size;
+    alert(tagName);
 
     if (file.size < 1000000 && sum < 5){
       if (imgs){
@@ -271,12 +207,8 @@ input[type="number"]::-webkit-inner-spin-button {
     reader.onloadend = function() {
       var div = document.createElement('div');
       div.className="effect"
-      div.innerHTML = ['<table><tr><td><img src=',reader.result,' name=',file.name,' sizes=',file.size,' onclick="align_item(this,',sum,')"/></td></tr><tr><td><input type="button" class="del" value="del" onclick="remove_item(this)"/><input type="text" class="tag" name="tags" id=',tagName,' size="15" placeholder="tag ex): #프론트"/></td></tr></table>'].join('');
+      div.innerHTML = ['<table><tr><td><img src=',reader.result,' name=',file.name,' sizes=',file.size,' onclick="align_item(this,',sum,')"/></td></tr></table>'].join('');
       document.getElementById('gallery').insertBefore(div, null);
-/*             let img = document.createElement('img');
-      img.id = file.name;
-      img.src = reader.result;
-      document.getElementById('gallery').appendChild(img); */
         if (imgs.length > 4 || sum >= 4){
           document.getElementById('de').innerHTML="출력순서를 클릭해주세요.[tag ex: 기본은 null입니다.]";    
           document.getElementById('de').style.color = "#ff0000";
@@ -310,24 +242,26 @@ input[type="number"]::-webkit-inner-spin-button {
     }
     var tags = document.querySelectorAll('.tag');
     counts = counts.length + 1;
-    var num = obj.name+'-'+counts;
 
     if (counts === 1){
-      obj.insertAdjacentHTML('afterend',['<div class="count">MAIN<input id="',obj.name,'" class="inp" name="count" type="hidden" value="',num,'"></div>'].join(''));    
+      obj.insertAdjacentHTML('afterend',['<div class="count">MAIN<input id="',obj.name,'" class="inp" type="hidden" value="',counts,'"></div>'].join(''));    
     } else if (counts === imgs.length){
-      obj.insertAdjacentHTML('afterend',['<div class="count">',counts,'<input id="',obj.name,'" class="inp" name="count" type="hidden" value="',num,'"></div>'].join(''));
+      obj.insertAdjacentHTML('afterend',['<div class="count">',counts,'<input id="',obj.name,'" class="inp" type="hidden" value="',counts,'"></div>'].join(''));
         document.getElementById('de').innerHTML="순서를초기화 하려면 이미지를 다시 클릭하세요";
 
-/*           var files = document.getElementById('fileElem');
+        setTimeout(() => {
+          var files = document.getElementById('fileElem');
           files = files.files;
           files = [...files];
-        setTimeout(() => {
-          files.forEach(uploadFile);   
-        },3000); */
+          files.forEach(uploadFile);
+          document.getElementById('de').innerHTML="업로드 되었습니다.";
+          document.getElementById('de').style.color = "blue";
+          
+        },3000);
       
 
     } else{      
-      obj.insertAdjacentHTML('afterend',['<div class="count">',counts,'<input id="',obj.name,'" class="inp" name="count" type="hidden" value="',num,'"></div>'].join(''));
+      obj.insertAdjacentHTML('afterend',['<div class="count">',counts,'<input id="',obj.name,'" class="inp" type="hidden" value="',counts,'"></div>'].join(''));
     }
   }
  
@@ -346,52 +280,34 @@ input[type="number"]::-webkit-inner-spin-button {
 
   function uploadFile(file) {
     var tagName = file.name+file.size;
-    var num = document.getElementById(file.name).value;
-    var tags = document.getElementById(tagName).value;
+//    var num = document.getElementById(file.name).value;
+//    var tag = document.getElementById(tagName).value;
 
-    const url = '/provider/uploads'
-  
+    const url = 'http://192.168.0.5:3000/provider/uploads'
+    
     let formData = new FormData();
     formData.append('image', file);
-    formData.append('num', num);
-    formData.append('tags', tags);
+//    formData.append('num', num);
+//    formData.append('tag', tag);
     //alert(formData.name);
   
     let req = new Request(url, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       },
-//      enctype: 'multipart/form-data',       
+      enctype: 'multipart/form-data',       
       body: formData
     })
     fetch(req).then((res) => {
-      if (!res.ok){
-        alert('요청실패');
-        throw Error(res.statusText);
-      } else{
+      if (res.status === 200 || res.status === 201){
         alert('요청성공');
-        document.getElementById('de').innerHTML="업로드 되었습니다.";        
-        document.getElementById('de').style.color = "blue"; 
-        document.querySelector('.tag').remove();
-        document.querySelector('.del').remove();
-
-        var imgs = document.querySelectorAll('img');
-        dropArea.removeEventListener('drop', handleDrop, false);
-        /* for(var i=0; imgs.length > i; i++){
-          imgs.onclick = false;
-        } */
-/*         ;['dragenter', 'dragover', 'dragleave', 'drop', 'click'].forEach(function(eventName) {
-          dropArea.removeEventListener(eventName, preventDefaults, false);
-        }); */
-
-        console.log(res.type);
+        console.log('요청성공');
+      } else{
+        alert('요청실패');
+        console.log('요청실패');
       }
     }).catch((error) => { console.log(error); })
   }
 </script>       
+    
   </body>
 </html>
 

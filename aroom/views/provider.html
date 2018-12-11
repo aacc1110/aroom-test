@@ -1,155 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>provider</title>
+
 <style>
-    #filelist {
-        margin-top: 15px;
+ #drop_area  {
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  width: 75%;
+  font-family: sans-serif;
+  margin: 20px auto;
+  padding: 20px;
+}
+.popup{
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  width: 75%;
+  font-family: sans-serif;
+  margin: 20px auto;
+  padding: 20px;  
+}
+#drop_area.highlight {
+  border-color: purple;
+}
+p {
+  margin-top: 0;
+}
+.my-form {
+  margin-bottom: 10px;
+}
+#gallery {
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
+  align-items: center;
+}
+
+#gallery img {
+  position: relative;
+  display: inline-block;
+  border: 1px dashed rgb(190, 182, 182);
+  border-radius: 10px;
+  width: 170px;
+  height: 120px;
+  margin-bottom: 0px;
+  margin-right: 3px;
+  align-self: center;
+}
+
+.effect {
+  position: relative;
+  display: inline-block;
+  overflow: hidden; /* 불필요한 부분 가리기 */
+  padding: 0px;
+}
+.effect:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 70px;
+  height: auto;
+  background: red;
+  content: "New";  /* 보여주는 텍스트 */
+  text-align: center;
+  color: #fff;
+  font-family: 'Arial';
+  font-weight: bold;
+  padding: 3px 5px;
+  left: -20px;
+  top: 3px;
+  transform: rotate(-30deg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+table, tr, td{
+/*   border: 1px solid red; */
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  text-align: center;
+}
+
+.button {
+  display: inline;
+  padding: 10px;
+  background: #ccc;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+.button:hover {
+  opacity: 0.7;
+/*   background: #ddd; */
+}
+#fileElem {
+  display: none;
+}
+#de{
+  font-size: 0.9em;
+}
+.dd{
+    position: absolute;
+    text-align: center;
+    color: white;
+}
+.abc{
+     position: relative;
+     top:50%;
+     left:50%;
+     transform: translate(-50%, -50%);                                                                   
+     font-size:20rem;
+     color: rgb(7, 6, 6);
+     z-index: 999;
+     text-align: center;
+}
+
+/* Bottom left text */
+.bottom-left {
+    position: relative;
+    bottom: 8px;
+    left: 16px;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+</style>
+</head>
+  
+  <body>
+  <div id="drop_area">
+      <form id="entry-form" action="/provider/uploads" method="POST" enctype = "multipart/form-data">
+<!--    <form class="my_form" action="#">  -->
+      <input type="file" id="fileElem" name="image" multiple accept="image/*" onchange="handleFiles(this.files)">
+      <label class="button" for="fileElem">Select Images</label>
+      <div id="gallery"></div>               
+      <p id="de">이미지5개까지 무료등록후 출력순서를 클릭해주세요.<br>
+        [용량:600KB, SIZE:640*360(16:9) 사이즈에 최적화되었습니다.]</p>
+<!--    </form> -->
+  </div>
+  <div class="popup">
+<!--    <form id="entry-form" action="/provider/provider_process" method="POST"> -->
+      <div>
+          <label for="item_type">ITEM *</label>
+            <select name="item_type" id="item_type" required >
+            <option value="고시원">Option one</option>
+            <option value="원룸">Option two</option>
+            <option value="싱글하우스">Option three</option>
+          </select>
+      </div>
+      <div>
+          <label for="title">TITLE *</label>
+          <input type="text" name="title" id="title" autofocus="autofocus" maxlength="20" required />
+      </div>
+      <div>
+          <label for="sex">SEX *</label>
+          <input type="radio" name="sex" value="public" checked="checked" />public
+          <input type="radio" name="sex" value="man" />man
+          <input type="radio" name="sex" value="woman" />woman
+      </div>      
+      <div>
+          <label for="address">ADDRESS *</label>
+          <input type="text" name="address" id="address" size="40" maxlength="50" required />
+      </div>
+      <div>
+          <label for="price_min">PRICE *</label>
+          <input type="number" name="price_min" id="price_min" min="5" max="99" required /> - 
+          <input type="number" name="price_max" id="price_max" min="5" max="99" required />
+      </div>
+      <div>
+          <label for="phone">PHONE *</label>
+          <input type="tel" name="phone_mobile" id="phone_mobile" maxlength="13" placeholder="ex): 010-0000-0000." pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}" required />
+      </div>
+      <div>
+          <label for="off_side">OFF_SIDE</label>
+          <input type="checkbox" name="elevator" id="elevator" value="elevator" />elevator
+          <input type="checkbox" name="parking" id="parking" value="parking" />parking
+      </div>                                  
+      <input type="submit" id="addup" value="ADD UP">
+      <input type="reset" id="resets" value="RESET">
+      <a class="close" href="#close"></a>    
+    </form>
+  </div>
+<script type="text/javascript">
+  /**
+    * 중복서브밋 방지
+    * 
+    * @returns {Boolean}
+    */
+  document.getElementById('addup').addEventListener('click', submit_in, false);
+
+  var doubleSubmitFlag = false;
+  function doubleSubmitCheck(){
+      if(doubleSubmitFlag){
+//          alert("다중클릭"); 
+          return doubleSubmitFlag;
+      }else{
+//          alert("등록"); 
+          doubleSubmitFlag = true;
+          return false;
+      }
+  }
+
+  function submit_in(){
+      if(doubleSubmitCheck()) return;
+  }
+
+  let dropArea = document.getElementById('drop_area');
+  
+  ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function(eventName) {
+    dropArea.addEventListener(eventName, preventDefaults, false)
+  })
+  
+  function preventDefaults (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  ;['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false)
+  })
+  
+  ;['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false)
+  })
+  
+  function highlight(e) {
+    dropArea.classList.add('highlight')
+  }
+  
+  function unhighlight(e) {
+    dropArea.classList.remove('highlight')
+  }
+  
+  dropArea.addEventListener('drop', handleDrop, false)
+  
+  function handleDrop(e) {
+    let dt = e.dataTransfer
+    let files = dt.files
+  
+    handleFiles(files)
+  }
+
+  function handleFiles(files) {
+    var files = [...files]
+        files.forEach(previewFile);
+//      files.forEach(uploadFile);
+  }
+
+  function previewFile(file,index) {
+    var imgs = document.querySelectorAll('img');
+    var sum = index + imgs.length;
+    var tagName = file.name+file.size;
+
+    if (file.size < 1000000 && sum < 5){
+      if (imgs){
+        for(var i = 0; i < imgs.length; i++){
+          if (imgs[i].name === file.name){
+            document.getElementById('de').innerHTML="존재하는 파일이 있습니다.";    
+            document.getElementById('de').style.color = "#ff0000";
+            return false;
+          }
+        } 
+      }
+    let reader = new FileReader();    
+    reader.readAsDataURL(file);
+    reader.onloadend = function() {
+      var div = document.createElement('div');
+      div.className="effect"
+      div.innerHTML = ['<table><tr><td><img src=',reader.result,' name=',file.name,' sizes=',file.size,' onclick="align_item(this,',sum,')"/></td></tr><tr><td><input type="button" class="del" value="del" onclick="remove_item(this)"/><input type="text" class="tag" name="tags" id=',tagName,' size="15" placeholder="tag ex): #프론트"/></td></tr></table>'].join('');
+      document.getElementById('gallery').insertBefore(div, null);
+/*             let img = document.createElement('img');
+      img.id = file.name;
+      img.src = reader.result;
+      document.getElementById('gallery').appendChild(img); */
+        if (imgs.length > 4 || sum >= 4){
+          document.getElementById('de').innerHTML="출력순서를 클릭해주세요.[tag ex: 기본은 null입니다.]";    
+          document.getElementById('de').style.color = "#ff0000";
+          return false;         
+        }
+      }
+    } else if(imgs.length > 4){
+        document.getElementById('de').innerHTML="출력순서를 클릭해주세요.[tag ex: 기본은 null입니다.]";
+        document.getElementById('de').style.color = "#ff0000";
+        return false; 
+
+    } else{
+        document.getElementById('de').innerHTML="용량이 너무큽니다. [(600KB) 640*360 사이즈에 최적화되었습니다.]";    
+        document.getElementById('de').style.color = "#ff0000";
+    } 
+  }
+  function del_counts(obj){
+    obj.remove();
+    document.getElementById('de').innerHTML="출력순서가 초기화되었습니다. [다시지정해주세요.]";    
+    document.getElementById('de').style.color = "#ff0000";
+  }
+  function align_item(obj, cou){
+    var counts = document.querySelectorAll('.count');
+    var imgs = document.querySelectorAll('img');
+    var inputs = document.querySelectorAll('.inp');
+    for(var i=0; i < inputs.length; i++){
+      if(inputs[i].id === obj.name){
+        counts.forEach(del_counts);
+        return false;
+      }
     }
-    
-    #uploadFilesButtonContainer, #selectFilesButtonContainer, #overallProgress {
-        display: inline-block;
+    var tags = document.querySelectorAll('.tag');
+    counts = counts.length + 1;
+    var num = obj.name+'-'+counts;
+
+    if (counts === 1){
+      obj.insertAdjacentHTML('afterend',['<div class="count">MAIN<input id="',obj.name,'" class="inp" name="count" type="hidden" value="',num,'"></div>'].join(''));    
+    } else if (counts === imgs.length){
+      obj.insertAdjacentHTML('afterend',['<div class="count">',counts,'<input id="',obj.name,'" class="inp" name="count" type="hidden" value="',num,'"></div>'].join(''));
+        document.getElementById('de').innerHTML="순서를초기화 하려면 이미지를 다시 클릭하세요";
+
+/*           var files = document.getElementById('fileElem');
+          files = files.files;
+          files = [...files];
+        setTimeout(() => {
+          files.forEach(uploadFile);   
+        },3000); */
+      
+
+    } else{      
+      obj.insertAdjacentHTML('afterend',['<div class="count">',counts,'<input id="',obj.name,'" class="inp" name="count" type="hidden" value="',num,'"></div>'].join(''));
     }
-    
-    #overallProgress {
-        float: right;
+  }
+ 
+
+  function remove_item(obj){
+    var counts = document.querySelectorAll('.count');
+    alert(counts.length);
+    if(counts.length === 0){
+      document.getElementById('de').innerHTML="이미지5개까지 무료등록후 출력순서를 클릭해주세요.<br>[용량:600KB, SIZE:640*360(16:9) 사이즈에 최적화되었습니다.]";
     }
-    
-    .yellowBackground {
-      background: #F2E699;
-    }
-    </style>
-    
-    <div id="exampleContainer">
-    <div id="uploaderContainer">
-        <div id="selectFilesButtonContainer">
-        </div>
-        <div id="uploadFilesButtonContainer">
-          <button type="button" id="uploadFilesButton"
-                  class="yui3-button" style="width:250px; height:35px;">Upload Files</button>
-        </div>
-        <div id="overallProgress">
-        </div>
-    </div>
-    
-    <div id="filelist">
-      <table id="filenames">
-        <thead>
-           <tr><th>File name</th><th>File size</th><th>Percent uploaded</th></tr>
-           <tr id="nofiles">
-            <td colspan="3" id="ddmessage">
-                <strong>No files selected.</strong>
-            </td>
-           </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-    </div>
-    </div>
-    
-    <script>
-    
-    YUI({filter:"raw"}).use("uploader", function(Y) {
-    Y.one("#overallProgress").set("text", "Uploader type: " + Y.Uploader.TYPE);
-       if (Y.Uploader.TYPE != "none" && !Y.UA.ios) {
-           var uploader = new Y.Uploader({width: "250px",
-                                          height: "35px",
-                                          multipleFiles: true,
-                                          swfURL: "flashuploader.swf?t=" + Math.random(),
-                                          uploadURL: "http://yuilibrary.com/sandbox/upload/",
-                                          simLimit: 2,
-                                          withCredentials: false
-                                         });
-           var uploadDone = false;
-    
-           if (Y.Uploader.TYPE == "html5") {
-              uploader.set("dragAndDropArea", "body");
-    
-              Y.one("#ddmessage").setHTML("<strong>Drag and drop files here.</strong>");
-    
-              uploader.on(["dragenter", "dragover"], function (event) {
-                  var ddmessage = Y.one("#ddmessage");
-                  if (ddmessage) {
-                    ddmessage.setHTML("<strong>Files detected, drop them here!</strong>");
-                    ddmessage.addClass("yellowBackground");
-                  }
-               });
-    
-               uploader.on(["dragleave", "drop"], function (event) {
-                  var ddmessage = Y.one("#ddmessage");
-                  if (ddmessage) {
-                    ddmessage.setHTML("<strong>Drag and drop files here.</strong>");
-                    ddmessage.removeClass("yellowBackground");
-                  }
-               });
-           }
-    
-           uploader.render("#selectFilesButtonContainer");
-    
-           uploader.after("fileselect", function (event) {
-    
-              var fileList = event.fileList;
-              var fileTable = Y.one("#filenames tbody");
-              if (fileList.length > 0 && Y.one("#nofiles")) {
-                Y.one("#nofiles").remove();
-              }
-    
-              if (uploadDone) {
-                uploadDone = false;
-                fileTable.setHTML("");
-              }
-    
-              Y.each(fileList, function (fileInstance) {
-                  fileTable.append("<tr id='" + fileInstance.get("id") + "_row" + "'>" +
-                                        "<td class='filename'>" + fileInstance.get("name") + "</td>" +
-                                        "<td class='filesize'>" + fileInstance.get("size") + "</td>" +
-                                        "<td class='percentdone'>Hasn't started yet</td>");
-                                 });
-           });
-    
-           uploader.on("uploadprogress", function (event) {
-                var fileRow = Y.one("#" + event.file.get("id") + "_row");
-                    fileRow.one(".percentdone").set("text", event.percentLoaded + "%");
-           });
-    
-           uploader.on("uploadstart", function (event) {
-                uploader.set("enabled", false);
-                Y.one("#uploadFilesButton").addClass("yui3-button-disabled");
-                Y.one("#uploadFilesButton").detach("click");
-           });
-    
-           uploader.on("uploadcomplete", function (event) {
-                var fileRow = Y.one("#" + event.file.get("id") + "_row");
-                    fileRow.one(".percentdone").set("text", "Finished!");
-           });
-    
-           uploader.on("totaluploadprogress", function (event) {
-                    Y.one("#overallProgress").setHTML("Total uploaded: <strong>" +
-                                                         event.percentLoaded + "%" +
-                                                         "</strong>");
-           });
-    
-           uploader.on("alluploadscomplete", function (event) {
-                         uploader.set("enabled", true);
-                         uploader.set("fileList", []);
-                         Y.one("#uploadFilesButton").removeClass("yui3-button-disabled");
-                         Y.one("#uploadFilesButton").on("click", function () {
-                              if (!uploadDone && uploader.get("fileList").length > 0) {
-                                 uploader.uploadAll();
-                              }
-                         });
-                         Y.one("#overallProgress").set("text", "Uploads complete!");
-                         uploadDone = true;
-           });
-    
-           Y.one("#uploadFilesButton").on("click", function () {
-             if (!uploadDone && uploader.get("fileList").length > 0) {
-                uploader.uploadAll();
-             }
-           });
-       }
-       else {
-           Y.one("#uploaderContainer").set("text", "We are sorry, but to use the uploader, you either need a browser that support HTML5 or have the Flash player installed on your computer.");
-       }
-    
-    
-    });
-    
-    </script>
+  // obj.parentNode 를 이용하여 삭제
+  obj.parentNode.parentNode.parentNode.parentNode.removeChild(obj.parentNode.parentNode.parentNode);
+  counts.forEach(del_counts);
+  //  document.getElementsById('gallery').removeChild(obj.parentNode); 
+} 
+
+  function uploadFile(file) {
+    var tagName = file.name+file.size;
+    var num = document.getElementById(file.name).value;
+    var tags = document.getElementById(tagName).value;
+
+    const url = '/provider/uploads'
+  
+    let formData = new FormData();
+    formData.append('image', file);
+    formData.append('num', num);
+    formData.append('tags', tags);
+    //alert(formData.name);
+  
+    let req = new Request(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       },
+//      enctype: 'multipart/form-data',       
+      body: formData
+    })
+    fetch(req).then((res) => {
+      if (!res.ok){
+        alert('요청실패');
+        throw Error(res.statusText);
+      } else{
+        alert('요청성공');
+        document.getElementById('de').innerHTML="업로드 되었습니다.";        
+        document.getElementById('de').style.color = "blue"; 
+        document.querySelector('.tag').remove();
+        document.querySelector('.del').remove();
+
+        var imgs = document.querySelectorAll('img');
+        dropArea.removeEventListener('drop', handleDrop, false);
+        /* for(var i=0; imgs.length > i; i++){
+          imgs.onclick = false;
+        } */
+/*         ;['dragenter', 'dragover', 'dragleave', 'drop', 'click'].forEach(function(eventName) {
+          dropArea.removeEventListener(eventName, preventDefaults, false);
+        }); */
+
+        console.log(res.type);
+      }
+    }).catch((error) => { console.log(error); })
+  }
+</script>       
+  </body>
+</html>
+
+

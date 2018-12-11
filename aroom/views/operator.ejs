@@ -1,138 +1,193 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-      <title><%= title %></title>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" type="text/css" href="./stylesheets/operator.css">
-      <link rel="stylesheet" type="text/css" href="./stylesheets/demo.css" />
-      <link rel="stylesheet" type="text/css" href="./stylesheets/component.css" />  
+    <title><%= title %></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="./stylesheets/operator.css">
+    <link rel="stylesheet" type="text/css" href="./stylesheets/demo.css" />
+    <link rel="stylesheet" type="text/css" href="./stylesheets/component.css" />  
  
-      <style>
-      html {
-        font-size: calc(14px + 0.3vw);
-      }
-      .panel a#join_pop{
-        display: none;
-      }
+    <style>
+    
+    html {
+      font-size: calc(14px + 0.3vw);
+    }
+    .panel a#join_pop{
+      display: none;
+    }
 
-      a#login_pop:hover, a#join_pop:hover, a#entry_pop:hover {
-          border-color: #eee;
-      }
-      .overlay {
-          background-color: rgba(0, 0, 0, 0.6);
-          bottom: 0;
-          cursor: default;
-          left: 0;
-          opacity: 0;
-          position: fixed;
-          right: 0;
-          top: 0;
-          visibility: hidden;
-          z-index: 1;
+    a#login_pop:hover, a#join_pop:hover, a#entry_pop:hover {
+        border-color: #eee;
+    }
+    .overlay {
+        background-color: rgba(0, 0, 0, 0.6);
+        bottom: 0;
+        cursor: default;
+        left: 0;
+        opacity: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        visibility: hidden;
+        z-index: 1;
 
-          -webkit-transition: opacity .5s;
-          -moz-transition: opacity .5s;
-          -ms-transition: opacity .5s;
-          -o-transition: opacity .5s;
-          transition: opacity .5s;
-      }
-      .overlay:target {
-          visibility: visible;
-          opacity: 1;
-      }
-      .popup {
-          background-color: #fff;
-          border: 3px solid #fff;
-          display: inline-block;
-          left: 50%;
-          opacity: 0;
-          padding: 15px;
-          position: fixed;
-          text-align: justify;
-          top: 40%;
-          visibility: hidden;
-          z-index: 10;
+        -webkit-transition: opacity .5s;
+        -moz-transition: opacity .5s;
+        -ms-transition: opacity .5s;
+        -o-transition: opacity .5s;
+        transition: opacity .5s;
+    }
+    .overlay:target {
+        visibility: visible;
+        opacity: 1;
+    }
+    .popup {
+        background-color: #fff;
+        border: 3px solid #fff;
+        display: inline-block;
+        left: 50%;
+        opacity: 0;
+        padding: 15px;
+        position: fixed;
+        text-align: justify;
+        top: 40%;
+        visibility: hidden;
+        z-index: 10;
+          border: 2px dashed #ccc;
 
-          -webkit-transform: translate(-50%, -50%);
-          -moz-transform: translate(-50%, -50%);
-          -ms-transform: translate(-50%, -50%);
-          -o-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
 
-          -webkit-border-radius: 10px;
-          -moz-border-radius: 10px;
-          -ms-border-radius: 10px;
-          -o-border-radius: 10px;
-          border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+        border-radius: 10px;
 
-          -webkit-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
-          -moz-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
-          -ms-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
-          -o-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
-          box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+        -webkit-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+        -moz-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+        -ms-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+        -o-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+        box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
 
-          -webkit-transition: opacity .5s, top .5s;
-          -moz-transition: opacity .5s, top .5s;
-          -ms-transition: opacity .5s, top .5s;
-          -o-transition: opacity .5s, top .5s;
-          transition: opacity .5s, top .5s;
-      }
-      .overlay:target+.popup {
-          top: 50%;
-          opacity: 1;
-          visibility: visible;
-      }
-      .close {
-          background-color: rgba(0, 0, 0, 0.8);
-          height: 30px;
-          line-height: 30px;
-          position: absolute;
-          right: 0;
-          text-align: center;
-          text-decoration: none;
-          top: -15px;
-          width: 30px;
+        -webkit-transition: opacity .5s, top .5s;
+        -moz-transition: opacity .5s, top .5s;
+        -ms-transition: opacity .5s, top .5s;
+        -o-transition: opacity .5s, top .5s;
+        transition: opacity .5s, top .5s;
+    }
+    .overlay:target+.popup {
+        top: 50%;
+        opacity: 1;
+        visibility: visible;
+    }
+    .close {
+        background-color: rgba(0, 0, 0, 0.8);
+        height: 30px;
+        line-height: 30px;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        text-decoration: none;
+        top: -15px;
+        width: 30px;
 
-          -webkit-border-radius: 15px;
-          -moz-border-radius: 15px;
-          -ms-border-radius: 15px;
-          -o-border-radius: 15px;
-          border-radius: 15px;
-      }
-      .close:before {
-          color: rgba(255, 255, 255, 0.9);
-          content: "X";
-          font-size: 24px;
-          text-shadow: 0 -1px rgba(0, 0, 0, 0.9);
-      }
-      .close:hover {
-          background-color: rgba(139, 214, 214, 0.8);
-      }
-      .popup p, .popup div {
-          margin-bottom: 10px;
-      }
-      .popup label {
-          display: inline-block;
-          text-align: left;
-          width: 120px;
-      }
-      .popup input[type="text"], .popup input[type="password"], .popup input[type="email"] {
-          border: 1px solid;
-          border-color: #999 #ccc #ccc;
-          margin: 0;
-          padding: 2px;
+        -webkit-border-radius: 15px;
+        -moz-border-radius: 15px;
+        -ms-border-radius: 15px;
+        -o-border-radius: 15px;
+        border-radius: 15px;
+    }
+    .close:before {
+        color: rgba(255, 255, 255, 0.9);
+        content: "X";
+        font-size: 24px;
+        text-shadow: 0 -1px rgba(0, 0, 0, 0.9);
+    }
+    .close:hover {
+        background-color: rgba(139, 214, 214, 0.8);
+    }
+    .popup p, .popup div {
+        margin-bottom: 10px;
+    }
+    .popup label {
+        display: inline-block;
+        text-align: left;
+        width: 120px;
+    }
+    .popup input[type="text"], .popup input[type="password"], .popup input[type="email"] {
+        border: 1px solid;
+        border-color: #999 #ccc #ccc;
+        margin: 0;
+        padding: 2px;
 
-          -webkit-border-radius: 2px;
-          -moz-border-radius: 2px;
-          -ms-border-radius: 2px;
-          -o-border-radius: 2px;
-          border-radius: 2px;
-      }
-      .popup input[type="text"]:hover, .popup input[type="password"], .popup input[type="email"]:hover {
-          border-color: #555 #888 #888;
-      }
-    </style>
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        -ms-border-radius: 2px;
+        -o-border-radius: 2px;
+        border-radius: 2px;
+    }
+    .popup input[type="text"]:hover, .popup input[type="password"], .popup input[type="email"]:hover {
+        border-color: #555 #888 #888;
+    }
+ #drop_area {
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  width: 100%;
+  font-family: sans-serif;
+  margin: 20px auto;
+  padding: 20px;
+}
+#drop_area.highlight {
+  border-color: purple;
+}
+
+p {
+  margin-top: 0;
+}
+.my-form {
+  margin-bottom: 10px;
+}
+#gallery {
+  width: 100%;
+  margin-top: 20px;
+  align-items: center;
+}
+/* #gallery img {
+  width: 150px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  vertical-align: middle;
+} */
+#gallery img {
+  display: inline-block;
+/*   border: 1px dashed #ccc;
+  border-radius: 10px; */
+  width: 25%;
+/*   height: 100px; */
+  margin-bottom: 5px;
+  margin-right: 5px;
+  align-self: center;
+}
+.button {
+  display: inline;
+  padding: 10px;
+  background: #ccc;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+.button:hover {
+  background: #ddd;
+}
+#fileElem {
+  display: none;
+}      
+  </style>
   <script type="text/javascript">
     function passCheck(){
     if(signup_fom.pass.value != signup_fom.pass1.value) {
@@ -141,7 +196,8 @@
       signup_fom.pass1.setCustomValidity('');
       };
     }
-  </script>   
+  </script> 
+  
   </head>
 
 <body>
@@ -212,9 +268,19 @@
       <a class="close" href="#close"></a>
     </form>        
   </div>
-    <!-- popup form #entry -->
+  <!-- popup form #entry -->
   <a href="#x" class="overlay" id="entry_form"></a>
   <div class="popup">
+      <!-- popup form #drag and drop -->
+    <div id="drop_area">
+    <form class="my_form">
+      <div id="de"><p>5 free registrations</p></div>
+      <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+      <label class="button" for="fileElem">Select Images</label>
+      <div id="gallery"></div>
+    </form>
+    </div>  
+        <!-- popup form #drag and drop end -->
     <form id="entry-form" action="/provider/provider_process" method="POST">
       <div>
           <label for="item">ITEM</label>
@@ -369,7 +435,114 @@
       <script>
         new CBPFWTabs( document.getElementById( 'tabs' ) );
       </script>
+<script type="text/javascript">
+  let dropArea = document.getElementById('drop_area')
+  
+  ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function(eventName) {
+    dropArea.addEventListener(eventName, preventDefaults, false)
+  })
+  
+  function preventDefaults (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  ;['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false)
+  })
+  
+  ;['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false)
+  })
+  
+  function highlight(e) {
+    dropArea.classList.add('highlight')
+  }
+  
+  function unhighlight(e) {
+    dropArea.classList.remove('highlight')
+  }
+  
+  dropArea.addEventListener('drop', handleDrop, false)
+  
+  function handleDrop(e) {
+    let dt = e.dataTransfer
+    let files = dt.files
+  
+    handleFiles(files)
+  }
+  
+  function handleFiles(files) {
+    var files = [...files]
+    var imgs = document.querySelectorAll('img');
 
+    if (files.length > 5 || imgs.length > 4){
+      document.getElementById("de").innerHTML="무료등록 5개, 1MB 1024*768 사이즈에 최적화되었습니다."    
+      document.getElementById("de").style.color = "#ff0000";
+      document.getElementById("de").style.fontSize = "25px";
+      document.getElementById("de").style.fontStyle.bold;
+    }
+    for (var i = 0; i < 5; i++) {
+      if (files[i].size > 1000000){
+      document.getElementById("de").innerHTML="용량이 너무 큰 파일이 있습니다. 1MB를 넘기지마세요."
+      document.getElementById("de").style.color = "#ff0000";
+      document.getElementById("de").style.fontSize = "25px";
+      document.getElementById("de").style.fontStyle.bold;        
+      } else{
+      let reader = new FileReader()
+
+      reader.readAsDataURL(files[i])
+      reader.onloadend = function() {
+        var img = document.createElement('img')
+        img.src = reader.result;
+        document.getElementById('gallery').appendChild(img); 
+      }
+      let formData = new FormData();
+      var url = 'http://localhost:3000/provider/uploads'
+    
+      formData.append('image', files[i]);
+   
+      fetch(url, {
+        method: 'POST',
+        enctype: 'multipart/form-data',
+        body: formData
+      })
+      .then() // <- Add `progressDone` call here
+      .catch((error) => { console.log('false'); }) 
+      }     
+    } 
+//      files.forEach(previewFile);
+//      files.forEach(uploadFile);
+  }
+
+/*   function previewFile(file) {
+    alert(file);
+    let reader = new FileReader()
+  
+    reader.readAsDataURL(file)
+    reader.onloadend = function() {
+      let img = document.createElement('img')
+      img.src = reader.result
+      document.getElementById('gallery').appendChild(img)
+    }
+  }
+
+  function uploadFile(file) {
+    var formData = new FormData();
+    var url = 'http://localhost:3000/provider/uploads'
+    
+    formData.append('image', file);
+    //alert(formData.name);
+  
+    fetch(url, {
+      method: 'POST',
+      enctype: 'multipart/form-data',
+      body: formData
+    })
+    .then() // <- Add `progressDone` call here
+    .catch((error) => { console.log('false'); })
+  } */
+</script>  
  
 </main>
 

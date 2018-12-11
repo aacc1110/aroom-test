@@ -7,13 +7,21 @@
     <title>Document</title>
 
 <style>
- #drop_area {
+ #drop_area  {
   border: 2px dashed #ccc;
   border-radius: 20px;
-  width: 60%;
+  width: 70%;
   font-family: sans-serif;
-  margin: 100px auto;
+  margin: 20px auto;
   padding: 20px;
+}
+.popup{
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  width: 70%;
+  font-family: sans-serif;
+  margin: 20px auto;
+  padding: 20px;  
 }
 #drop_area.highlight {
   border-color: purple;
@@ -25,16 +33,32 @@ p {
   margin-bottom: 10px;
 }
 #gallery {
-  margin-top: 10px;
+  width: 100%;
+  margin-top: 20px;
+  align-items: center;
 }
 #gallery img {
-  width: 150px;
-  margin-bottom: 10px;
-  margin-right: 10px;
-  vertical-align: middle;
-}
-.button {
   display: inline-block;
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+  width: 160px;
+  height: 100px;
+  margin-bottom: 5px;
+  margin-right: 2px;
+  align-self: center;
+}
+/* .imgg {
+  display: inline-block;
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+  width: 20%;
+  height: 100px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  align-self: center;
+} */
+.button {
+  display: inline;
   padding: 10px;
   background: #ccc;
   cursor: pointer;
@@ -51,15 +75,62 @@ p {
 </head>
   
   <body>
-    <div id="drop_area">
-        <form class="my_form">
-          <div id="de"><p>무료등록은 5개까지 가능합니다.1M 1024* 768에 최적화되었습니다.</p></div>
-          <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-          <label class="button" for="fileElem">Select Images</label>
-          <div id="gallery"></div>
-        </form>
+  <div id="drop_area">
+    <form class="my_form">
+      <div id="de"><p>5 free registrations</p></div>
+      <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+      <label class="button" for="fileElem">Select Images</label>
+      <div id="gallery"></div>     
+    </form>
+  </div>
+  <!-- popup form #entry -->
+  <a href="#x" class="overlay" id="entry_form"></a>
+  <div class="popup">
+    <form id="entry-form" action="/provider/provider_process" method="POST">
+      <div>
+          <label for="item">ITEM</label>
+            <select name="item" id="item" required >
+            <option value="고시원">Option one</option>
+            <option value="원룸">Option two</option>
+            <option value="싱글하우스">Option three</option>
+          </select>
       </div>
-
+      <div>
+          <label for="title">TITLE *</label>
+          <input type="text" name="title" id="title" autofocus="autofocus" maxlength="20" required />
+      </div>
+      <div>
+          <label for="sex">SEX *</label>
+          <input type="radio" name="sex" value="public" checked="checked" />public
+          <input type="radio" name="sex" value="man" />man
+          <input type="radio" name="sex" value="woman" />woman
+      </div>      
+      <div>
+          <label for="address">ADDRESS *</label>
+          <input type="text" name="address" id="address" size="40" maxlength="50" required />
+      </div>
+      <div>
+          <label for="price_min">PRICE *</label>
+          <input type="number" name="price_min" id="price_min" min="5" max="99" required />
+          <input type="number" name="price_max" id="price_max" min="5" max="99" required />
+      </div>
+      <div>
+          <label for="phone">PHONE</label>
+          <input type="text" name="phone" id="phone" maxlength="13" placeholder="ex): 010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required />
+      </div>
+      <div>
+          <label for="off_side">OFF_SIDE</label>
+          <input type="checkbox" name="elevator" id="elevator" />elevator
+          <input type="checkbox" name="parking" id="parking" />parking
+      </div>
+      <div>
+          <label for="memo">MEMO</label>
+          <textarea rows="4" cols="43" name="memo" id="memo" maxlength="100" placeholder="100자 이내"></textarea>
+      </div>                                         
+      <input type="submit" id="addup" value="ADD Up">
+      <a class="close" href="#close"></a>    
+    </form>
+  </div>
 
 <script type="text/javascript">
   let dropArea = document.getElementById('drop_area')
@@ -99,20 +170,28 @@ p {
   }
   
   function handleFiles(files) {
-    files = [...files]
-    if (files.length > 5){
+    var files = [...files]
+    var imgs = document.querySelectorAll('img');
+    alert(imgs.length);
+    if (files.length > 5 || imgs.length > 4){
+      document.getElementById("de").innerHTML="무료등록 5개, 1MB 1024*768 사이즈에 최적화되었습니다."    
       document.getElementById("de").style.color = "#ff0000";
-    }  
-    for (var i = 0; i < 5; i++) {
+      document.getElementById("de").style.fontSize = "25px";
+      document.getElementById("de").style.fontStyle.bold;
+    }
+    for (var i = 0; i < files.length; i++) {
+      if (files[i].size < 1000000 && files.length < 5 && imgs.length < 5){
+
       let reader = new FileReader()
 
       reader.readAsDataURL(files[i])
       reader.onloadend = function() {
         let img = document.createElement('img')
-        img.src = reader.result
-        document.getElementById('gallery').appendChild(img)
+//        let img = document.getElementById('imgg'+i);
+        img.src = reader.result;
+        document.getElementById('gallery').appendChild(img); 
       }
-      var formData = new FormData();
+/*       let formData = new FormData();
       var url = 'http://localhost:3000/provider/uploads'
     
       formData.append('image', files[i]);
@@ -123,8 +202,9 @@ p {
         body: formData
       })
       .then() // <- Add `progressDone` call here
-      .catch((error) => { console.log('false'); })      
-      }       
+      .catch((error) => { console.log('false'); })  */
+      }     
+    } 
 //      files.forEach(previewFile);
 //      files.forEach(uploadFile);
   }

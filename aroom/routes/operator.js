@@ -8,7 +8,7 @@ var bcrypt = require('bcrypt');
 
 module.exports = function(passport){
 router.get('/', function(request, response, next) {
-    console.log(request.user);
+/*     console.log(request.user); */
     if(request.user){
         db.query(`SELECT * FROM topic`, function(error, topics){
             var list = template.list(topics);

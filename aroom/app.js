@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
-app.use('/provider', express.static('uploads'));
+app.use('/provider', express.static(path.join(__dirname, '/uploads')));
 app.use(compression());
 app.use(helmet.hsts({
   maxAge: 10886400000,

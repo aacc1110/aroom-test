@@ -6,29 +6,59 @@ var shortid = require('shortid');
 var db = require('../lib/db');
 var bcrypt = require('bcrypt');
 var multer = require('multer');
+var fetch = require('node-fetch');
 
 
-var storage = multer.diskStorage({
-      destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+var upload = multer({
+    limits:{fileSize: 1000000},
+    storage: multer.diskStorage({
+      destination: function (request, file, cb) {
+        cb(null, 'uploads');
       },
-      filename: function (req, file, cb) {
+      filename: function (request, file, cb) {
         cb(null, new Date().valueOf() + path.extname(file.originalname));
       }
-    });
-
-var upload = multer({ storage: storage, limits: { size: 1048576} }).array('image');
-
+    })
+}).array('image', 5);
 
 router.post('/uploads', upload, (request, response) =>{
-    if(!request.files){
-        console.log('No file received');
-    } else{
-        console.log('file received');
+    var post = request.body;
+    var offside = post.elevator + ',' + post.parking;
+    var images = null;
+    if(request.files.length > 0){
+        images = true;
+
+        console.log('file received');  
         console.log(request.files);
-    }
+        console.log(post.count);
+    } else{
+        console.log('No file received');         
+      }
+    console.log(images);
+    console.log(post);
+
+    db.query(`INSERT INTO provider (operator_id, item_type, title, sex, address, price_min, price_max, phone_mobile, offside, images)
+    SELECT  ?,?,?,?,?,?,?,?,?,?  FROM DUAL
+    WHERE NOT EXISTS(SELECT * FROM provider WHERE address='${post.address}')`,[request.user.id, post.item_type, post.title, post.sex, post.address, post.price_min, post.price_max, post.phone_mobile, offside, images], 
+    function(error, result, fileds){
+        if (error){ 
+            console.log(error);
+            throw error; 
+        }
+        if(result.affectedRows === 0){
+            console.log('값이 있습니다.');
+            console.log(result);
+            console.log(post);
+            console.log(images);
+        } else{
+            console.log('저장했습니다.');
+            console.log(result);
+            console.log(images);          
+        }
+        response.render('entry', { title: 'provider', name: ``, page: `이미지 YES (관리자의 승인을 기다리는중입니다.)` });
+    })
 });
-/* module.exports = function(passport){ */
+
 router.get('/', function(request, response, next) {
     console.log(request.user.email);
     if(request.user){
@@ -42,14 +72,20 @@ router.get('/', function(request, response, next) {
 
 });
 
-router.post('/provider_process', function (request, response) {
+router.post('/provider_process', (request, response) => {
     var post = request.body;
     console.log(post);
-    response.redirect('../operator')
-    var email = post.email;
+    if(!request.files){
+        console.log('No file received');
+    } else{
+        console.log('file received');
+        console.log(request.files);
+    }
+/*     response.redirect('../operator'); */
+/*     var email = post.email;
     var pwd = post.pwd;
     var pwd2 = post.pwd2;
-    var displayName = post.displayName;
+    var displayName = post.displayName; */
 /*     if(pwd !== pwd2){
       request.flash('error', 'Password must same!');
       response.redirect('/auth/register');

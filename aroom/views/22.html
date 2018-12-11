@@ -30,9 +30,40 @@ button.replace {    /*button tag 에 원하는 스타일 적용*/
   color: #fff;
   cursor: pointer;
 }
+/* Container holding the image and the text */
+.imgg {
+    
+    position: absolute;
+    text-align: center;
+    color: white;
+}
+
+/* Bottom left text */
+.bottom-left {
+    position: relative;
+    bottom: 8px;
+    left: 16px;
+}
+
   </style>
 </head>
 <body>
+    <table style="border: 1px solid red;">
+        <tr>
+            <td><input type="button" value="del"/></td>
+        </tr>
+        <tr>
+            <td>fdsfsdf</td>
+        </tr>
+    </table> 
+    <img src="fetch-dog.jpg" alt="Snow" style="width:100%;" class="imgg">
+
+        <div class="bottom-left">Bottom Left</div>
+        <div class="top-left">Top Left</div>
+        <div class="top-right">Top Right</div>
+        <div class="bottom-right">Bottom Right</div>
+        <div class="centered">Centered</div>
+
 
     <h3>로컬에 있는 이미지를 바로 브라우저에 표시</h3>
     <button class="replace">파일 업로드</button>

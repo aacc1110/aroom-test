@@ -9,7 +9,7 @@ module.exports = function (app){
 
     // 로그인에 성공하면 session에 값을 저장해라
     passport.serializeUser(function(user, done) {
-        console.log('serializeUser', user);
+/*         console.log('serializeUser', user); */
         done(null, user.id);
     });
     // 로그인이 된 상태에서 홈페이지에 방문시마다 아이디를 체크한다.
@@ -42,8 +42,7 @@ module.exports = function (app){
                             return done(null, false, {                              
                                 message: 'Password is not correct.'
                             });
-                        }
-        
+                        }        
                     });
                 } else {
                     console.log('There is no email.');
