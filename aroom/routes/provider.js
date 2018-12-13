@@ -1,22 +1,26 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+var fs = require('fs-extra');
 var template = require('../lib/template.js');
 var shortid = require('shortid');
 var db = require('../lib/db');
 var bcrypt = require('bcrypt');
 var multer = require('multer');
 var fetch = require('node-fetch');
+var jsonfile = require('jsonfile');
 
 
 var upload = multer({
     limits:{fileSize: 1000000},
     storage: multer.diskStorage({
-      destination: function (request, file, cb) {
+      destination: (request, file, cb) => {
+
         cb(null, 'uploads');
       },
-      filename: function (request, file, cb) {
-        cb(null, new Date().valueOf() + path.extname(file.originalname));
+      filename: (request, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+//        cb(null, new Date().valueOf() + path.extname(file.originalname));
       }
     })
 }).array('image', 5);
@@ -24,22 +28,52 @@ var upload = multer({
 router.post('/uploads', upload, (request, response) =>{
     var post = request.body;
     var offside = post.elevator + ',' + post.parking;
-    var images = null;
+    var passName = 'data/'+request.user.email;
+    var imgpass =JSON.stringify({
+        "pass": post.count,
+        "tag": post.tags, 
+        "offside": {"elevator": post.elevator, "parking": post.parking},
+        });
+//    var images = null;
+console.log(post);
     if(request.files.length > 0){
-        images = true;
+//        images = true;
+        upload(request, response, (error) =>{
+            if(error){
+                console.log(error.message);
+                return false;
+            } 
+        });
 
+        fs.mkdir(passName, (err) => { 
+            if (err && err.code != 'EEXIST'){
+                throw err;
+            } else{
+                fs.mkdir(passName+'/'+post.title, (err) =>{
+                    if (err && err.code != 'EEXIST'){
+                        throw err;
+                    } else{
+                        fs.writeJSON(passName+'/'+post.title+'/'+post.title+'.json', post, (err, data) =>{
+                            if (err && err.code != 'EEXIST'){
+                                throw err;
+                            }
+                            console.log('file creat');
+                        });
+                    }
+                })
+            }
+        })
+
+       
         console.log('file received');  
         console.log(request.files);
-        console.log(post.count);
     } else{
         console.log('No file received');         
       }
-    console.log(images);
-    console.log(post);
 
-    db.query(`INSERT INTO provider (operator_id, item_type, title, sex, address, price_min, price_max, phone_mobile, offside, images)
+    db.query(`INSERT INTO provider (operator_id, item_type, title, sex, address, price_min, price_max, phone_mobile, offside, imgname)
     SELECT  ?,?,?,?,?,?,?,?,?,?  FROM DUAL
-    WHERE NOT EXISTS(SELECT * FROM provider WHERE address='${post.address}')`,[request.user.id, post.item_type, post.title, post.sex, post.address, post.price_min, post.price_max, post.phone_mobile, offside, images], 
+    WHERE NOT EXISTS(SELECT * FROM provider WHERE address='${post.address}')`,[request.user.id, post.item_type, post.title, post.sex, post.address, post.price_min, post.price_max, post.phone_mobile, offside, imgpass], 
     function(error, result, fileds){
         if (error){ 
             console.log(error);
@@ -47,13 +81,9 @@ router.post('/uploads', upload, (request, response) =>{
         }
         if(result.affectedRows === 0){
             console.log('값이 있습니다.');
-            console.log(result);
-            console.log(post);
-            console.log(images);
+
         } else{
-            console.log('저장했습니다.');
-            console.log(result);
-            console.log(images);          
+            console.log('저장했습니다.');       
         }
         response.render('entry', { title: 'provider', name: ``, page: `이미지 YES (관리자의 승인을 기다리는중입니다.)` });
     })

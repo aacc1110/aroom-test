@@ -308,14 +308,15 @@ input[type="number"]::-webkit-inner-spin-button {
         return false;
       }
     }
-    var tags = document.querySelectorAll('.tag');
+/*     var tagobj = obj.name+obj.sizes;
+    var tag = document.getElementById(tagobj).value; */
     counts = counts.length + 1;
     var num = obj.name+'-'+counts;
 
     if (counts === 1){
-      obj.insertAdjacentHTML('afterend',['<div class="count">MAIN<input id="',obj.name,'" class="inp" name="count" type="hidden" value="',num,'"></div>'].join(''));    
+      obj.insertAdjacentHTML('afterend',['<div class="count">MAIN<input id="',obj.name,'" class="inp" name="count" type="hidden" value=',num,'></div>'].join(''));    
     } else if (counts === imgs.length){
-      obj.insertAdjacentHTML('afterend',['<div class="count">',counts,'<input id="',obj.name,'" class="inp" name="count" type="hidden" value="',num,'"></div>'].join(''));
+      obj.insertAdjacentHTML('afterend',['<div class="count">',counts,'<input id="',obj.name,'" class="inp" name="count" type="hidden" value=',num,'></div>'].join(''));
         document.getElementById('de').innerHTML="순서를초기화 하려면 이미지를 다시 클릭하세요";
 
 /*           var files = document.getElementById('fileElem');
@@ -323,11 +324,10 @@ input[type="number"]::-webkit-inner-spin-button {
           files = [...files];
         setTimeout(() => {
           files.forEach(uploadFile);   
-        },3000); */
-      
+        },3000); */      
 
     } else{      
-      obj.insertAdjacentHTML('afterend',['<div class="count">',counts,'<input id="',obj.name,'" class="inp" name="count" type="hidden" value="',num,'"></div>'].join(''));
+      obj.insertAdjacentHTML('afterend',['<div class="count">',counts,'<input id="',obj.name,'" class="inp" name="count" type="hidden" value=',num,'></div>'].join(''));
     }
   }
  
