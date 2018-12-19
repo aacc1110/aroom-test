@@ -27,22 +27,29 @@ var upload = multer({
 
 router.post('/uploads', upload, (request, response) =>{
     var post = request.body;
+    var files = request.files;
     var offside = post.elevator + ',' + post.parking;
     var passName = 'data/'+request.user.email;
-    var imgpass =JSON.stringify({
-        "pass": post.count,
+    var vector =JSON.stringify({
+        'vector': [post.count, post.tags, post.elevator, post.parking, post.address, post.price_min, post.price_max]
+    /*         "pass": post.count,
         "tag": post.tags, 
-        "offside": {"elevator": post.elevator, "parking": post.parking},
+        "offside": [post.elevator, post.parking] */
         });
-//    var images = null;
-console.log(post);
-    if(request.files.length > 0){
-//        images = true;
+        console.log(files);
+
+    if(files.length > 0){
         upload(request, response, (error) =>{
             if(error){
                 console.log(error.message);
                 return false;
-            } 
+            } else{
+                response.render('entry',{
+                    address: post.address,
+                    files: files,
+                    offside: offside
+                })
+            }          
         });
 
         fs.mkdir(passName, (err) => { 
@@ -73,7 +80,7 @@ console.log(post);
 
     db.query(`INSERT INTO provider (operator_id, item_type, title, sex, address, price_min, price_max, phone_mobile, offside, imgname)
     SELECT  ?,?,?,?,?,?,?,?,?,?  FROM DUAL
-    WHERE NOT EXISTS(SELECT * FROM provider WHERE address='${post.address}')`,[request.user.id, post.item_type, post.title, post.sex, post.address, post.price_min, post.price_max, post.phone_mobile, offside, imgpass], 
+    WHERE NOT EXISTS(SELECT * FROM provider WHERE address='${post.address}')`,[request.user.id, post.item_type, post.title, post.sex, post.address, post.price_min, post.price_max, post.phone_mobile, offside, vector], 
     function(error, result, fileds){
         if (error){ 
             console.log(error);
@@ -85,7 +92,6 @@ console.log(post);
         } else{
             console.log('저장했습니다.');       
         }
-        response.render('entry', { title: 'provider', name: ``, page: `이미지 YES (관리자의 승인을 기다리는중입니다.)` });
     })
 });
 
@@ -101,6 +107,7 @@ router.get('/', function(request, response, next) {
     }
 
 });
+
 
 router.post('/provider_process', (request, response) => {
     var post = request.body;
