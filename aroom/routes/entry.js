@@ -9,7 +9,7 @@ var bcrypt = require('bcrypt');
 var multer = require('multer');
 var fetch = require('node-fetch');
 var jsonfile = require('jsonfile');
-var gm = require('gm');
+var jimp = require('jimp');
 
 
 router.get('/', function(request, response, next) {
@@ -18,11 +18,18 @@ router.get('/', function(request, response, next) {
     if(request.user){
 //        var jsonfile = fs.readFile('data/'+request.user.email+'/'+request.title+'/adasd.json');
 //        console.log(jsonfile)
-        response.render('entry', { 
+jimp.read('uploads/1545285029735-imagePreview.png', (err, image) =>{
+    if(err){ throw err; }
+    image.resize(200,100)
+    .quality(80)
+    .write('image.jpg')
+  });
+  console.log('didkdi');
+/* response.render('entry', { 
             title: 'entry', 
             name: request.user.email,
             page: jsonfile 
-        });
+        }); */
     } else{
         response.render('entry', { title: 'entry', name: ``, page: `WELCOME` });
     }
