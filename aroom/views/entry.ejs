@@ -5,23 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>preview</title>
-<style>
-.mySlides {display:none}
-</style>
 <body>
 <%- address %>
 <%- files.length %>
 <%- offside %>
-
+<%- useremail %>
+<%- title %>
 <% if(files.length > 0){ %>
 
   <% for(var i=0; i < files.length; i++){ %>
         <li>
             <%- files[i].filename %>
         </li>
-      <div style="max-width:1200px">
-      <img src="<%- files[i].filename %>">
-
+      <img src="../data/<%- useremail %>/<%- title %>/<%- files[i].filename %>">data
   <% } %>
 <% } %>
 

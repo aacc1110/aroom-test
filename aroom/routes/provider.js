@@ -9,18 +9,19 @@ var bcrypt = require('bcrypt');
 var multer = require('multer');
 var fetch = require('node-fetch');
 var jsonfile = require('jsonfile');
+var gm = require('gm');
 
 
 var upload = multer({
     limits:{fileSize: 1000000},
     storage: multer.diskStorage({
       destination: (request, file, cb) => {
-
-        cb(null, 'uploads');
+        cb(null, 'uploads/');
+        //console.log(file);
       },
       filename: (request, file, cb) => {
         cb(null, Date.now() + '-' + file.originalname);
-//        cb(null, new Date().valueOf() + path.extname(file.originalname));
+//        console.log(file);
       }
     })
 }).array('image', 5);
@@ -36,7 +37,25 @@ router.post('/uploads', upload, (request, response) =>{
         "tag": post.tags, 
         "offside": [post.elevator, post.parking] */
         });
-        console.log(files);
+    fs.mkdir(passName, (err) => { 
+        if (err && err.code != 'EEXIST'){
+            throw err;
+        } else{
+            fs.mkdir(passName+'/'+post.title, (err) =>{
+                if (err && err.code != 'EEXIST'){
+                    throw err;
+                } else{
+                    fs.writeJSON(passName+'/'+post.title+'/'+post.title+'.json', post, (err, data) =>{
+                        if (err && err.code != 'EEXIST'){
+                            throw err;
+                        }
+                        console.log('json creat');
+                    });
+
+                }
+            })
+        }
+    })        
 
     if(files.length > 0){
         upload(request, response, (error) =>{
@@ -44,39 +63,45 @@ router.post('/uploads', upload, (request, response) =>{
                 console.log(error.message);
                 return false;
             } else{
-                response.render('entry',{
-                    address: post.address,
-                    files: files,
-                    offside: offside
-                })
-            }          
-        });
-
-        fs.mkdir(passName, (err) => { 
-            if (err && err.code != 'EEXIST'){
-                throw err;
-            } else{
-                fs.mkdir(passName+'/'+post.title, (err) =>{
-                    if (err && err.code != 'EEXIST'){
-                        throw err;
-                    } else{
-                        fs.writeJSON(passName+'/'+post.title+'/'+post.title+'.json', post, (err, data) =>{
-                            if (err && err.code != 'EEXIST'){
-                                throw err;
-                            }
-                            console.log('file creat');
-                        });
-                    }
-                })
-            }
-        })
-
-       
+                files.forEach(function(file){
+                    console.log(file.filename);
+                    gm('uploads/'+file.filename)
+                    .resize('500', '400')
+                    .noProfile()
+                    .write(passName+'/'+post.title+'/'+file.filename, (err) =>{
+                        if (err){
+                            console.log(err.message);
+                        } else{
+                            console.log('done-image'); 
+                            gm('uploads/'+file.filename)
+                            .noProfile()
+                            .gravity('center')
+                            .resize('150','100', "^>")
+                            .quality(60)
+                            .crop('150', '100')
+                            .write(passName+'/'+post.title+'/'+file.filename+'thumb', (err) =>{
+                                if (err){
+                                    console.log(err.message);
+                                } else{
+                                    console.log('done-thumb'); 
+/*                                     response.render('entry',{
+                                        useremail: request.user.email,
+                                        address: post.address,
+                                        files: files,
+                                        offside: offside,
+                                        title: post.title
+                                    })  */
+                                }
+                            })                          
+                        }
+                    }); 
+                });                
+            };          
+        });       
         console.log('file received');  
-        console.log(request.files);
     } else{
         console.log('No file received');         
-      }
+    }
 
     db.query(`INSERT INTO provider (operator_id, item_type, title, sex, address, price_min, price_max, phone_mobile, offside, imgname)
     SELECT  ?,?,?,?,?,?,?,?,?,?  FROM DUAL
@@ -91,8 +116,10 @@ router.post('/uploads', upload, (request, response) =>{
 
         } else{
             console.log('저장했습니다.');       
-        }
+        }      
     })
+/*     response.redirect('../entry', {title: post.title}); */
+
 });
 
 router.get('/', function(request, response, next) {
@@ -108,40 +135,5 @@ router.get('/', function(request, response, next) {
 
 });
 
+module.exports = router;
 
-router.post('/provider_process', (request, response) => {
-    var post = request.body;
-    console.log(post);
-    if(!request.files){
-        console.log('No file received');
-    } else{
-        console.log('file received');
-        console.log(request.files);
-    }
-/*     response.redirect('../operator'); */
-/*     var email = post.email;
-    var pwd = post.pwd;
-    var pwd2 = post.pwd2;
-    var displayName = post.displayName; */
-/*     if(pwd !== pwd2){
-      request.flash('error', 'Password must same!');
-      response.redirect('/auth/register');
-    } else {
-      bcrypt.hash(pwd, 10, function (err, hash) {
-        var user = {
-          id: shortid.generate(),
-          email: email,
-          password: hash,
-          displayName: displayName
-        };
-        db.get('users').push(user).write();
-        request.login(user, function (err) {
-          console.log('redirect');
-          return response.redirect('/');
-        })
-      })
-    } */
-  });
-  module.exports = router;
-/*   return router;
-}; */

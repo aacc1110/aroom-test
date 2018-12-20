@@ -14,6 +14,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var operatorRouter = require('./routes/operator')(passport);
 var providerRouter = require('./routes/provider');
+var entryRouter = require('./routes/entry');
 
 var app = express();
 
@@ -26,8 +27,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '/public')));
-app.use('/provider', express.static(path.join(__dirname, '/uploads')));
+app.use(express.static(path.join(__dirname, '/')));
+// app.use('/provider', express.static(path.join(__dirname, '/uploads')));
 app.use(compression());
 app.use(helmet.hsts({
   maxAge: 10886400000,
@@ -52,6 +53,7 @@ var passport = require('./lib/passport')(app);
 app.use('/', indexRouter);
 app.use('/operator', operatorRouter);
 app.use('/provider', providerRouter);
+app.use('/entry', entryRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
