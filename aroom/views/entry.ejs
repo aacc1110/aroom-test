@@ -8,7 +8,6 @@
 <body>
 <%- address %>
 <%- files.length %>
-<%- offside %>
 <%- useremail %>
 <%- title %>
 <% if(files.length > 0){ %>
@@ -17,7 +16,7 @@
         <li>
             <%- files[i].filename %>
         </li>
-      <img src="../data/<%- useremail %>/<%- title %>/<%- files[i].filename %>">data
+      <img src="../uploads/<%- files[i].filename %>">uploads
   <% } %>
 <% } %>
 

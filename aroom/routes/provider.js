@@ -34,9 +34,7 @@ router.post('/uploads', upload, (request, response) =>{
   var vector =JSON.stringify({
       'vector': [post.count, post.tags, post.elevator, post.parking, post.address, post.price_min, post.price_max]
       });
-
-
-  
+  console.log(files.filename);
   fs.mkdir(passName, (err) => { 
     if (err && err.code != 'EEXIST'){
       throw err;
@@ -45,33 +43,64 @@ router.post('/uploads', upload, (request, response) =>{
         if (err && err.code != 'EEXIST'){
           throw err;
         } else{
-          fs.writeJSON(passName+'/'+post.title+'/'+post.title+'.json', post, (err, data) =>{
+          jsonfile.writeFile(passName+'/'+post.title+'/'+post.title+'.json', post, (err, data) =>{
             if (err && err.code != 'EEXIST'){
               throw err;
-            }
+            } else{
               console.log('json creat');
+              if(files.length > 0){
+                upload(request, response, (error) =>{
+                  if(error){
+                    console.log(error.message);
+                    return false;
+                  } else{
+                    var named = [];
+                      files.forEach((file, index) => {
+                      console.log('uploads/'+file.filename);
+                      named.push(file.filename);
+                      jimp.read('uploads/'+file.filename)
+                      .then(img =>{
+                        return img.resize(500, jimp.AUTO)
+                        .quality(90)
+                        .write(passName+'/'+post.title+'/'+file.filename);
+                      }).then(img =>{
+                        return img.resize(150, jimp.AUTO)
+                        .quality(70)
+                        .write(passName+'/'+post.title+'/thumb-'+file.filename);
+            
+                      }).catch(err =>{
+                        console.error(err.message);
+                      });
+                    });
+                    console.log(named);
+                    jsonfile.readFile(passName+'/'+post.title+'/'+post.title+'.json',(err,oldData) =>{
+                      if(err){console.error(err);}
+                      jsonfile.writeFile(passName+'/'+post.title+'/'+post.title+'.json',Object.assign(data,{imgname: named}),(err) =>{
+                        if(err){ throw err; }
+                        console.log('Saved');
+                      })
+                    })                    
+                    response.render('provider_view', {
+                        address: post.address,
+                        useremail: request.user.email,
+                        title: post.title,
+                        files: files,
+                        count: post.count
+                        
+                    })                 
+                  };          
+                });
+                console.log('file received');  
+              } else{
+                console.log('No file received');         
+              }
+            }
           });
         }
       })
     }
   })        
 
-  if(files.length > 0){
-    upload(request, response, (error) =>{
-      if(error){
-        console.log(error.message);
-        return false;
-      } else{
-          files.forEach((file) => {
-          console.log('uploads/'+file.filename);
-
-        });                
-      };          
-    });       
-    console.log('file received');  
-  } else{
-    console.log('No file received');         
-  }
 
   db.query(`INSERT INTO provider (operator_id, item_type, title, sex, address, price_min, price_max, phone_mobile, offside, imgname)
   SELECT  ?,?,?,?,?,?,?,?,?,?  FROM DUAL
@@ -88,6 +117,7 @@ router.post('/uploads', upload, (request, response) =>{
       console.log('저장했습니다.');       
     }      
   });
+ 
 /*     response.redirect('../entry', {title: post.title}); */
 
 });

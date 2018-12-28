@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>preview</title>
+<style>
+ #drop_area  {
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  width: 75%;
+  font-family: sans-serif;
+  margin: 20px auto;
+  padding: 20px;
+}
+.my-form {
+  margin-bottom: 10px;
+}
+#gallery {
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
+  align-items: center;
+}
+
+#gallery img {
+  position: relative;
+  display: inline-block;
+  border: 1px dashed rgb(190, 182, 182);
+  border-radius: 10px;
+  width: 170px;
+  height: 120px;
+  margin-bottom: 0px;
+  margin-right: 3px;
+  align-self: center;
+}
+
+.effect {
+  position: relative;
+  display: inline-block;
+  overflow: hidden; /* 불필요한 부분 가리기 */
+  padding: 0px;
+}
+.effect:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 70px;
+  height: auto;
+  background: red;
+  content: "New";  /* 보여주는 텍스트 */
+  text-align: center;
+  color: #fff;
+  font-family: 'Arial';
+  font-weight: bold;
+  padding: 3px 5px;
+  left: -20px;
+  top: 3px;
+  transform: rotate(-30deg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+table, tr, td{
+/*   border: 1px solid red; */
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  text-align: center;
+}
+
+.button {
+  display: inline;
+  padding: 10px;
+  background: #ccc;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+.button:hover {
+  opacity: 0.7;
+/*   background: #ddd; */
+}
+#fileElem {
+  display: none;
+}
+#de{
+  font-size: 0.9em;
+}
+.dd{
+    position: absolute;
+    text-align: center;
+    color: white;
+}
+.abc{
+     position: relative;
+     top:50%;
+     left:50%;
+     transform: translate(-50%, -50%);                                                                   
+     font-size:20rem;
+     color: rgb(7, 6, 6);
+     z-index: 999;
+     text-align: center;
+}
+
+/* Bottom left text */
+.bottom-left {
+    position: relative;
+    bottom: 8px;
+    left: 16px;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+</style>
+<script>
+
+var count = '<%- count %>';
+//var imgnameArray = count.split(',');
+/* alert(imgnameArray.length);
+if(imgnameArray.length > 0){
+  for (var i=0; i < imgnameArray.length; i++) {
+    var imgnum = imgnameArray[i];
+    imgnum = imgnum.substr(imgnum.length - 1);
+    alert(imgnum);
+  };
+}; */
+  //count.sort();
+  alert(count);
+/*   var div = document.createElement('div');
+  div.className="effect"
+  div.innerHTML = ['<img src=uploads/',file.filename,].join('');
+  document.getElementById('gallery1').insertBefore(div, null); */
+
+</script>
+</head>    
+<body>
+<%- files %>
+<%- useremail %>
+<%- address %>
+<%- title %>
+<%- count %>
+  <div id="drop_area">
+    <div id="gallerry1"></div>
+      <div id="gallery">
+<% if(files.length > 0){ %>
+<% files.forEach(file =>{%>
+      <img src="../uploads/<%= file.filename %>">
+  <%=file.filename%>
+<% }) %>
+  <% for(var i=0; i < files.length; i++){ %>
+  <%
+  var imgname = count[i].split('-');
+  %>
+        <li>
+        <%= imgname[1]%>
+        <%- count[i] %>
+        </li>
+        <li>
+          <%- files[i].filename %>
+        </li>
+      <img src="../uploads/<%- files[i].filename %>">uploads
+  <% } %>
+<% } %>      
+      
+      </div>               
+  </div>
+
+
+</body>
+</html> 
